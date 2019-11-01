@@ -2,7 +2,17 @@ import React from 'react'
 import { Button } from '@zendeskgarden/react-buttons'
 import { Field, Label, Hint, Input } from '@zendeskgarden/react-forms'
 import { Grid, Row, Col } from '@zendeskgarden/react-grid'
-import { LG } from '@zendeskgarden/react-typography'
+import { XL, LG } from '@zendeskgarden/react-typography'
+import {
+  Table,
+  Caption,
+  Head,
+  HeaderRow,
+  HeaderCell,
+  Body,
+  Row as TableRow,
+  Cell
+} from '@zendeskgarden/react-tables'
 
 import I18n from '../lib/i18n'
 import zafClient from '../lib/zafClient'
@@ -14,7 +24,7 @@ class TrackingStatus extends React.Component {
 
     this.state = {
       orderNumber: '',
-      orderHeaders: [],
+      orderHeaders: undefined,
       fetchError: undefined
     }
     this.updateOrderNumber = this.updateOrderNumber.bind(this)
@@ -86,14 +96,30 @@ class TrackingStatus extends React.Component {
               <LG>{this.state.fetchError}</LG>
             </Col>
           </Row>}
-          { !this.state.fetchError && this.state.orderHeaders && this.state.orderHeaders.map(header => <Row key={header.tracking_number}>
-            <Col md={6}>
-              <LG>{I18n.t('trackingStatus.trackingNumber')}: {header.tracking_number}</LG>
+          { !this.state.fetchError && this.state.orderHeaders &&
+          <Row>
+            <Col>
+              <Table size='small' style={{marginTop: '50px'}}>
+                <XL tag={Caption}>
+                  Order status
+                </XL>
+                <Head>
+                  <HeaderRow>
+                    <HeaderCell width='50%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
+                    <HeaderCell width='50%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
+                  </HeaderRow>
+                </Head>
+                <Body>
+                  { this.state.orderHeaders.map((header, index) =>
+                    <TableRow key={index} striped={index % 2 === 0}>
+                      <Cell width='50%'>{header.tracking_number}</Cell>
+                      <Cell width='50%'>{header.last_delivery_status.status}</Cell>
+                    </TableRow>
+                  )}
+                </Body>
+              </Table>
             </Col>
-            <Col md={6}>
-              <LG>{I18n.t('trackingStatus.deliveryStatus')}: {header.last_delivery_status.status}</LG>
-            </Col>
-          </Row>)}
+          </Row>}
         </Grid>
       </form>
     </div>

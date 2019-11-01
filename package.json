@@ -40,9 +40,11 @@
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
+    "@zendeskgarden/css-bedrock": "^7.0.31",
     "@zendeskgarden/react-buttons": "^7.0.2",
     "@zendeskgarden/react-forms": "^7.0.2",
     "@zendeskgarden/react-grid": "^7.0.2",
+    "@zendeskgarden/react-tables": "^7.0.2",
     "@zendeskgarden/react-theming": "^7.0.0",
     "@zendeskgarden/react-typography": "^7.0.0",
     "prop-types": "^15.7.2",

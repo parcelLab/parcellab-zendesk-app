@@ -1,3 +1,9 @@
+@import '@zendeskgarden/css-bedrock';
+@import '@zendeskgarden/react-buttons/dist/styles.css';
+@import '@zendeskgarden/react-forms/dist/styles.css';
+@import '@zendeskgarden/react-grid/dist/styles.css';
+@import '@zendeskgarden/react-tables/dist/styles.css';
+
 .loader {
   left: 50%;
   position: absolute;
