@@ -35,11 +35,17 @@ describe('TrackingStatus Component', () => {
     zafClient.request = jest.fn().mockReturnValue(Promise.resolve(
       {
         header: [{
+          courier: {
+            name: 'dhl'
+          },
           tracking_number: 'trackingNummber1',
           last_delivery_status: {
             status: 'Delivery is being prepared'
           }
         }, {
+          courier: {
+            name: 'dhl'
+          },
           tracking_number: 'trackingNummber2',
           last_delivery_status: {
             status: 'Ready for Collection'
@@ -59,11 +65,17 @@ describe('TrackingStatus Component', () => {
     zafClient.request = jest.fn().mockReturnValue(Promise.resolve(
       {
         header: [{
+          courier: {
+            name: 'dhl'
+          },
           tracking_number: 'trackingNummber1',
           last_delivery_status: {
             status: 'Delivery is being prepared'
           }
         }, {
+          courier: {
+            name: 'dhl'
+          },
           tracking_number: 'trackingNummber2',
           last_delivery_status: {
             status: 'Ready for Collection'
