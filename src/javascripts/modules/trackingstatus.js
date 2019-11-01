@@ -105,15 +105,19 @@ class TrackingStatus extends React.Component {
                 </XL>
                 <Head>
                   <HeaderRow>
-                    <HeaderCell width='50%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
-                    <HeaderCell width='50%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
+                    <HeaderCell width='45%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
+                    <HeaderCell width='45%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
+                    <HeaderCell width='10%'>{I18n.t('trackingStatus.statusLink')}</HeaderCell>
                   </HeaderRow>
                 </Head>
                 <Body>
                   { this.state.orderHeaders.map((header, index) =>
                     <TableRow key={index} striped={index % 2 === 0}>
-                      <Cell width='50%'>{header.tracking_number}</Cell>
-                      <Cell width='50%'>{header.last_delivery_status.status}</Cell>
+                      <Cell width='45'>{header.tracking_number}</Cell>
+                      <Cell width='45%'>{header.last_delivery_status.status}</Cell>
+                      <Cell width='10%'>
+                        <a target='_blank' rel='noopener' href={`https://www.delivery-status.com/?courier=${header.courier.name}&trackingNo=${header.tracking_number}&lang=en`}>></a>
+                      </Cell>
                     </TableRow>
                   )}
                 </Body>

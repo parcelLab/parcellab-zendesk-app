@@ -17,5 +17,6 @@
   "trackingStatus.checkButton": "Check",
   "trackingStatus.deliveryStatus": "Delivery Status",
   "trackingStatus.trackingNumber": "Tracking Number",
+  "trackingStatus.statusLink": ">",
   "trackingStatus.orderStatus": "Order status"
 }
