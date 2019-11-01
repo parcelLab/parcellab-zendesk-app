@@ -1,0 +1,53 @@
+{
+  "name": "parcellab-zendesk-app",
+  "version": "0.1.0",
+  "description": "A Zendesk ticket sidebar app to check order status via parcelLab API",
+  "author": "parcelLab",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=6.11.5"
+  },
+  "scripts": {
+    "test": "jest --watchAll",
+    "watch": "webpack --watch --mode=development",
+    "build:dev": "webpack --mode=development",
+    "build": "webpack -p --mode=production",
+    "lint": "standard",
+    "start": "zat server -p ./dist --unattended"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.2",
+    "@testing-library/react": "^9.3.1",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.4.0",
+    "babel-loader": "^7.1.5",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^1.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^23.4.0",
+    "mini-css-extract-plugin": "^0.4.1",
+    "postcss-import": "^11.1.0",
+    "postcss-loader": "^2.1.6",
+    "postcss-preset-env": "^5.2.1",
+    "precss": "^3.1.2",
+    "standard": "^11.0.1",
+    "webpack": "^4.16.0",
+    "webpack-cli": "^3.0.8"
+  },
+  "dependencies": {
+    "@zendeskgarden/react-buttons": "^7.0.2",
+    "@zendeskgarden/react-forms": "^7.0.2",
+    "@zendeskgarden/react-grid": "^7.0.2",
+    "@zendeskgarden/react-theming": "^7.0.0",
+    "@zendeskgarden/react-typography": "^7.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "styled-components": "^4.4.1"
+  }
+}

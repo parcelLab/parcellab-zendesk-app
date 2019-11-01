@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "Example App",
+    "short_description": "Short Description",
+    "long_description": "Long Description",
+    "installation_instructions": "Configure the following app settings, then click Install:...",
+    "title": "Example App",
+    "paramters": {
+      "userId": {
+        "label": "Your parcelLab userId"
+      }
+    }
+  },
+  "trackingStatus.greeting": "Hello {{username}}! What order would you like to check?",
+  "trackingStatus.orderNumber": "Order #",
+  "trackingStatus.orderNumberHint": "Enter the order number you would like to check",
+  "trackingStatus.checkButton": "Check",
+  "trackingStatus.deliveryStatus": "Delivery Status",
+  "trackingStatus.trackingNumber": "Tracking Number"
+}
