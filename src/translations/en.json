@@ -16,5 +16,6 @@
   "trackingStatus.orderNumberHint": "Enter the order number you would like to check",
   "trackingStatus.checkButton": "Check",
   "trackingStatus.deliveryStatus": "Delivery Status",
-  "trackingStatus.trackingNumber": "Tracking Number"
+  "trackingStatus.trackingNumber": "Tracking Number",
+  "trackingStatus.orderStatus": "Order status"
 }

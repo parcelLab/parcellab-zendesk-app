@@ -101,7 +101,7 @@ class TrackingStatus extends React.Component {
             <Col>
               <Table size='small' style={{marginTop: '50px'}}>
                 <XL tag={Caption}>
-                  Order status
+                  {I18n.t('trackingStatus.orderStatus')}
                 </XL>
                 <Head>
                   <HeaderRow>
