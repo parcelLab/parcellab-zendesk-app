@@ -1,7 +1,5 @@
 import React from 'react'
-import { Button, IconButton, Icon } from '@zendeskgarden/react-buttons'
-import SVG from 'react-inlinesvg'
-import LinkIcon from '@zendeskgarden/svg-icons/src/16/share-fill.svg'
+import { Button } from '@zendeskgarden/react-buttons'
 import { Field, Label, Hint, Input } from '@zendeskgarden/react-forms'
 import { Grid, Row, Col } from '@zendeskgarden/react-grid'
 import { XL, LG } from '@zendeskgarden/react-typography'
@@ -19,6 +17,7 @@ import {
 import I18n from '../lib/i18n'
 import zafClient from '../lib/zafClient'
 import {resizeContainer} from '../lib/helpers'
+import { inherits } from 'util'
 
 class TrackingStatus extends React.Component {
   constructor (props) {
@@ -101,36 +100,24 @@ class TrackingStatus extends React.Component {
           { !this.state.fetchError && this.state.orderHeaders &&
           <Row>
             <Col>
-              <Table size='large' style={{marginTop: '50px'}}>
+              <Table size='small' style={{marginTop: '50px'}}>
                 <XL tag={Caption}>
                   {I18n.t('trackingStatus.orderStatus')}
                 </XL>
                 <Head>
                   <HeaderRow>
-                    <HeaderCell width='42.5%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
-                    <HeaderCell width='42.5%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
-                    <HeaderCell width='15%'>
-                      <Icon size='small'>
-                        <SVG src={LinkIcon} />
-                      </Icon>
-                    </HeaderCell>
+                    <HeaderCell width='50%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
+                    <HeaderCell width='50%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
                   </HeaderRow>
                 </Head>
                 <Body>
                   { this.state.orderHeaders.map((header, index) =>
-                    <TableRow key={index} striped={index % 2 === 0}>
-                      <Cell width='42.5'>{header.tracking_number}</Cell>
-                      <Cell width='42.5%'>{header.last_delivery_status.status}</Cell>
-                      <Cell width='15%'>
-                        <a target='_blank' rel='noopener' href={`https://www.delivery-status.com/?courier=${header.courier.name}&trackingNo=${header.tracking_number}&lang=en`}>
-                          <IconButton>
-                            <Icon size='small'>
-                              <SVG src={LinkIcon} />
-                            </Icon>
-                          </IconButton>
-                        </a>
-                      </Cell>
-                    </TableRow>
+                    <a key={index} style={{color: 'inherit', textDecoration: 'inherit'}} target='_blank' rel='noopener' href={`https://www.delivery-status.com/?courier=${header.courier.name}&trackingNo=${header.tracking_number}&lang=en`}>
+                      <TableRow>
+                        <Cell width='50'>{header.tracking_number}</Cell>
+                        <Cell width='50%'>{header.last_delivery_status.status}</Cell>
+                      </TableRow>
+                    </a>
                   )}
                 </Body>
               </Table>
