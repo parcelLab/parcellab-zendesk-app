@@ -3,6 +3,7 @@
 @import '@zendeskgarden/react-forms/dist/styles.css';
 @import '@zendeskgarden/react-grid/dist/styles.css';
 @import '@zendeskgarden/react-tables/dist/styles.css';
+@import '@zendeskgarden/react-notifications/dist/styles.css';
 
 .loader {
   left: 50%;

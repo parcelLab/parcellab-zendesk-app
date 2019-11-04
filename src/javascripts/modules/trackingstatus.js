@@ -13,11 +13,11 @@ import {
   Row as TableRow,
   Cell
 } from '@zendeskgarden/react-tables'
+import { Alert, Close, Title } from '@zendeskgarden/react-notifications'
 
 import I18n from '../lib/i18n'
 import zafClient from '../lib/zafClient'
 import {resizeContainer} from '../lib/helpers'
-import { inherits } from 'util'
 
 class TrackingStatus extends React.Component {
   constructor (props) {
@@ -26,7 +26,7 @@ class TrackingStatus extends React.Component {
     this.state = {
       orderNumber: '',
       orderHeaders: undefined,
-      fetchError: undefined
+      error: undefined
     }
     this.updateOrderNumber = this.updateOrderNumber.bind(this)
     this.fetchCheckpoints = this.fetchCheckpoints.bind(this)
@@ -56,12 +56,12 @@ class TrackingStatus extends React.Component {
       const response = await zafClient.request(request)
       this.setState({
         orderHeaders: response.header,
-        fetchError: undefined
+        error: undefined
       })
     } catch (error) {
       this.setState({
         orderHeader: [],
-        fetchError: 'Order Number Cannot Be Found'
+        error: I18n.t('trackingStatus.error.message')
       })
     }
   }
@@ -92,12 +92,16 @@ class TrackingStatus extends React.Component {
               <Button stretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
             </Col>
           </Row>
-          {this.state.fetchError && <Row>
-            <Col md={12}>
-              <LG>{this.state.fetchError}</LG>
+          {this.state.error && <Row>
+            <Col md={12} style={{marginTop: '50px'}}>
+              <Alert type='error'>
+                <Title>{I18n.t('trackingStatus.error.title')}</Title>
+                {this.state.error}
+                <Close id='root' onClick={() => this.setState({error: undefined})} aria-label={I18n.t('trackingStatus.error.close-aria-label')} />
+              </Alert>
             </Col>
           </Row>}
-          { !this.state.fetchError && this.state.orderHeaders &&
+          { !this.state.error && this.state.orderHeaders &&
           <Row>
             <Col>
               <Table size='small' style={{marginTop: '50px'}}>

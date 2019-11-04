@@ -1,6 +1,6 @@
 /* eslint-env jest, browser */
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, wait } from '@testing-library/react'
 
 import TrackingStatus from '../src/javascripts/modules/trackingstatus'
 import zafClient from '../src/javascripts/lib/zafClient'
@@ -95,11 +95,29 @@ describe('TrackingStatus Component', () => {
 
   it('should show error message if checkpoints could not be fetched successfully', async () => {
     zafClient.request = jest.fn().mockRejectedValue('error')
-    const { getByLabelText, findByText, container } = render(<TrackingStatus />)
+    const { getByLabelText, getByText, container } = render(<TrackingStatus />)
     fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
     fireEvent.click(container.querySelector('Button'))
 
-    const orderStatus = await findByText(/cannot be found/i)
-    expect(orderStatus).toBeDefined()
+    await wait(() => {
+      expect(getByText(/could not be found/i)).toBeDefined()
+    })
+  })
+
+  it('should close error message if close button of error notification is clicked', async () => {
+    zafClient.request = jest.fn().mockRejectedValue('error')
+    const { getByLabelText, getByText, container, queryByText } = render(<TrackingStatus />)
+    fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+    fireEvent.click(container.querySelector('Button'))
+
+    await wait(() => {
+      expect(getByText(/could not be found/i)).toBeDefined()
+    })
+
+    fireEvent.click(getByLabelText(/close error notification/i))
+
+    await wait(() => {
+      expect(queryByText(/could not be found/i)).toBeNull()
+    })
   })
 })
