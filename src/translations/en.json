@@ -5,7 +5,7 @@
     "long_description": "Long Description",
     "installation_instructions": "Configure the following app settings, then click Install:...",
     "title": "Example App",
-    "paramters": {
+    "parameters": {
       "userId": {
         "label": "Your parcelLab userId"
       }
@@ -17,6 +17,5 @@
   "trackingStatus.checkButton": "Check",
   "trackingStatus.deliveryStatus": "Delivery Status",
   "trackingStatus.trackingNumber": "Tracking Number",
-  "trackingStatus.statusLink": ">",
   "trackingStatus.orderStatus": "Order status"
 }
