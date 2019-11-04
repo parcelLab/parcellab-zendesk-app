@@ -89,7 +89,7 @@ class TrackingStatus extends React.Component {
           </Row>
           <Row>
             <Col md={12}>
-              <Button stretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
+              <Button disabled={this.state.orderNumber.length === 0} stretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
             </Col>
           </Row>
           {this.state.error && <Row>

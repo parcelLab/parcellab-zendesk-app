@@ -1,5 +1,6 @@
 /* eslint-env jest, browser */
 import React from 'react'
+import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent, wait } from '@testing-library/react'
 
 import TrackingStatus from '../src/javascripts/modules/trackingstatus'
@@ -23,12 +24,12 @@ describe('TrackingStatus Component', () => {
 
   it('should render without a currentUser', () => {
     const {getByText} = render(<TrackingStatus />)
-    expect(getByText('Hello ! What order would you like to check?')).toBeDefined()
+    expect(getByText('Hello ! What order would you like to check?')).toBeInTheDocument()
   })
 
   it('should render with a currentUser', () => {
     const {getByText} = render(<TrackingStatus currentUser='Timmy Testface' />)
-    expect(getByText('Hello Timmy Testface! What order would you like to check?')).toBeDefined()
+    expect(getByText('Hello Timmy Testface! What order would you like to check?')).toBeInTheDocument()
   })
 
   it('should show order status for each parcel if checkpoints have been fetched successfully', async () => {
@@ -57,8 +58,8 @@ describe('TrackingStatus Component', () => {
     fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
     fireEvent.click(container.querySelector('Button'))
 
-    expect(await findByText(/delivery is being prepared/i)).toBeDefined()
-    expect(await findByText(/ready for collection/i)).toBeDefined()
+    expect(await findByText(/delivery is being prepared/i)).toBeInTheDocument()
+    expect(await findByText(/ready for collection/i)).toBeInTheDocument()
   })
 
   it('should show tracking number for each parcel if checkpoints has been fetched successfully', async () => {
@@ -87,10 +88,20 @@ describe('TrackingStatus Component', () => {
     fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
     fireEvent.click(container.querySelector('Button'))
 
-    expect(await findByText(/delivery is being prepared/i)).toBeDefined()
-    expect(await findByText(/trackingNummber1/i)).toBeDefined()
-    expect(await findByText(/ready for collection/i)).toBeDefined()
-    expect(await findByText(/trackingNummber2/i)).toBeDefined()
+    expect(await findByText(/delivery is being prepared/i)).toBeInTheDocument()
+    expect(await findByText(/trackingNummber1/i)).toBeInTheDocument()
+    expect(await findByText(/ready for collection/i)).toBeInTheDocument()
+    expect(await findByText(/trackingNummber2/i)).toBeInTheDocument()
+  })
+
+  it('should have a disabled check button if input field is empty', async () => {
+    const { getByLabelText, container } = render(<TrackingStatus />)
+    fireEvent.change(getByLabelText(/order/i), {target: {value: ''}})
+    fireEvent.click(container.querySelector('Button'))
+
+    await wait(() => {
+      expect(container.querySelector('Button')).toHaveAttribute('disabled')
+    })
   })
 
   it('should show error message if checkpoints could not be fetched successfully', async () => {
@@ -100,7 +111,7 @@ describe('TrackingStatus Component', () => {
     fireEvent.click(container.querySelector('Button'))
 
     await wait(() => {
-      expect(getByText(/could not be found/i)).toBeDefined()
+      expect(getByText(/could not be found/i)).toBeInTheDocument()
     })
   })
 
@@ -111,13 +122,13 @@ describe('TrackingStatus Component', () => {
     fireEvent.click(container.querySelector('Button'))
 
     await wait(() => {
-      expect(getByText(/could not be found/i)).toBeDefined()
+      expect(getByText(/could not be found/i)).toBeInTheDocument()
     })
 
     fireEvent.click(getByLabelText(/close error notification/i))
 
     await wait(() => {
-      expect(queryByText(/could not be found/i)).toBeNull()
+      expect(queryByText(/could not be found/i)).not.toBeInTheDocument()
     })
   })
 })
