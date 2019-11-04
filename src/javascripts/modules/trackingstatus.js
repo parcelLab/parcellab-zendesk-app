@@ -24,36 +24,50 @@ class TrackingStatus extends React.Component {
     super(props)
 
     this.state = {
+      showOrderNumberInput: false,
       orderNumber: '',
       orderHeaders: undefined,
       error: undefined
     }
     this.updateOrderNumber = this.updateOrderNumber.bind(this)
-    this.fetchCheckpoints = this.fetchCheckpoints.bind(this)
+    this.submitForm = this.submitForm.bind(this)
+    this.fetchOrderStatus = this.fetchOrderStatus.bind(this)
   }
 
   componentDidUpdate () {
     resizeContainer(zafClient)
   }
-  componentDidMount () {
+  async componentDidMount () {
     resizeContainer(zafClient)
+
+    try {
+      const userId = (await zafClient.metadata()).settings.userId
+      const orderNumberTicketFieldId = (await zafClient.metadata()).settings.orderNumberTicketFieldId
+      const queryString = `ticket.customField:custom_field_${orderNumberTicketFieldId}`
+      const orderNumberTicketFieldValue = await zafClient.get(queryString)
+      const orderNumber = orderNumberTicketFieldValue ? orderNumberTicketFieldValue[queryString] : undefined
+      const response = await this.fetchCheckpointsHeaders(userId, orderNumber)
+      this.setState({
+        orderHeaders: response.header,
+        error: undefined
+      })
+    } catch (e) {
+      this.setState({
+        showOrderNumberInput: true,
+        orderHeader: [],
+        error: I18n.t('trackingStatus.error.automaticFetch.message')
+      })
+    }
   }
 
   updateOrderNumber (event) {
     this.setState({orderNumber: event.target.value})
   }
 
-  async fetchCheckpoints (event) {
-    event.preventDefault()
+  async fetchOrderStatus (orderNumber) {
     try {
       const userId = (await zafClient.metadata()).settings.userId
-      const request = {
-        url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${this.state.orderNumber}`,
-        type: 'GET',
-        cors: true
-      }
-
-      const response = await zafClient.request(request)
+      const response = await this.fetchCheckpointsHeaders(userId, orderNumber)
       this.setState({
         orderHeaders: response.header,
         error: undefined
@@ -61,37 +75,55 @@ class TrackingStatus extends React.Component {
     } catch (error) {
       this.setState({
         orderHeader: [],
-        error: I18n.t('trackingStatus.error.message')
+        error: I18n.t('trackingStatus.error.manualFetch.message')
       })
     }
+  }
+
+  async fetchCheckpointsHeaders (userId, orderNumber) {
+    const request = {
+      url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${orderNumber}`,
+      type: 'GET',
+      cors: true
+    }
+    return zafClient.request(request)
+  }
+
+  async submitForm (event) {
+    event.preventDefault()
+    this.fetchOrderStatus(this.state.orderNumber)
   }
 
   render () {
     const currentUser = this.props.currentUser
     return <div>
-      <form onSubmit={this.fetchCheckpoints}>
+      <form onSubmit={this.submitForm}>
         <Grid>
-          <Row>
-            <Col md={12}>
-              <LG tag='h1'>
-                {I18n.t('trackingStatus.greeting', {username: currentUser})}
-              </LG>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={12}>
-              <Field stretched>
-                <Label>{I18n.t('trackingStatus.orderNumber')}</Label>
-                <Hint>{I18n.t('trackingStatus.orderNumberHint')}</Hint>
-                <Input onChange={this.updateOrderNumber} value={this.state.orderNumber} />
-              </Field>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={12}>
-              <Button disabled={this.state.orderNumber.length === 0} stretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
-            </Col>
-          </Row>
+          {this.state.showOrderNumberInput &&
+          <React.Fragment>
+            <Row>
+              <Col md={12}>
+                <LG tag='h1'>
+                  {I18n.t('trackingStatus.greeting', {username: currentUser})}
+                </LG>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={12}>
+                <Field stretched>
+                  <Label>{I18n.t('trackingStatus.orderNumber')}</Label>
+                  <Hint>{I18n.t('trackingStatus.orderNumberHint')}</Hint>
+                  <Input onChange={this.updateOrderNumber} value={this.state.orderNumber} />
+                </Field>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={12}>
+                <Button disabled={this.state.orderNumber.length === 0} stretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
+              </Col>
+            </Row>
+          </React.Fragment>
+          }
           {this.state.error && <Row>
             <Col md={12} style={{marginTop: '50px'}}>
               <Alert type='error'>

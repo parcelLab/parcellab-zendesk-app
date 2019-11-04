@@ -19,6 +19,7 @@
   "trackingStatus.trackingNumber": "Tracking Number",
   "trackingStatus.orderStatus": "Order status",
   "trackingStatus.error.title": "Error",
-  "trackingStatus.error.message": "Order Could Not Be Found",
+  "trackingStatus.error.automaticFetch.message": "Ticket Order Number Status Could Not Be Found",
+  "trackingStatus.error.manualFetch.message": "Entered Order Number Status Could Not Be Found",
   "trackingStatus.error.close-aria-label": "Close Error Notification"
 }

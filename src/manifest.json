@@ -17,6 +17,11 @@
     "type": "text",
     "secure": false,
     "required": true
+  }, {
+    "name": "orderNumberTicketFieldId",
+    "type": "text",
+    "secure": false,
+    "required": false
   }],
   "domainWhiteList": ["api.parcellab.com"],
   "version": "1.0",
