@@ -10,5 +10,8 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/spec'
   ],
-  roots: ['./spec']
+  roots: ['./spec'],
+  moduleNameMapper: {
+    '\\.svg$': '<rootDir>/spec/mocks/emptyModule.js'
+  }
 }

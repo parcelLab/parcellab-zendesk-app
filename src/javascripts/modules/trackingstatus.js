@@ -1,5 +1,7 @@
 import React from 'react'
-import { Button } from '@zendeskgarden/react-buttons'
+import { Button, IconButton, Icon } from '@zendeskgarden/react-buttons'
+import SVG from 'react-inlinesvg'
+import LinkIcon from '@zendeskgarden/svg-icons/src/16/share-fill.svg'
 import { Field, Label, Hint, Input } from '@zendeskgarden/react-forms'
 import { Grid, Row, Col } from '@zendeskgarden/react-grid'
 import { XL, LG } from '@zendeskgarden/react-typography'
@@ -99,24 +101,34 @@ class TrackingStatus extends React.Component {
           { !this.state.fetchError && this.state.orderHeaders &&
           <Row>
             <Col>
-              <Table size='small' style={{marginTop: '50px'}}>
+              <Table size='large' style={{marginTop: '50px'}}>
                 <XL tag={Caption}>
                   {I18n.t('trackingStatus.orderStatus')}
                 </XL>
                 <Head>
                   <HeaderRow>
-                    <HeaderCell width='45%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
-                    <HeaderCell width='45%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
-                    <HeaderCell width='10%'>{I18n.t('trackingStatus.statusLink')}</HeaderCell>
+                    <HeaderCell width='42.5%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
+                    <HeaderCell width='42.5%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
+                    <HeaderCell width='15%'>
+                      <Icon size='small'>
+                        <SVG src={LinkIcon} />
+                      </Icon>
+                    </HeaderCell>
                   </HeaderRow>
                 </Head>
                 <Body>
                   { this.state.orderHeaders.map((header, index) =>
                     <TableRow key={index} striped={index % 2 === 0}>
-                      <Cell width='45'>{header.tracking_number}</Cell>
-                      <Cell width='45%'>{header.last_delivery_status.status}</Cell>
-                      <Cell width='10%'>
-                        <a target='_blank' rel='noopener' href={`https://www.delivery-status.com/?courier=${header.courier.name}&trackingNo=${header.tracking_number}&lang=en`}>></a>
+                      <Cell width='42.5'>{header.tracking_number}</Cell>
+                      <Cell width='42.5%'>{header.last_delivery_status.status}</Cell>
+                      <Cell width='15%'>
+                        <a target='_blank' rel='noopener' href={`https://www.delivery-status.com/?courier=${header.courier.name}&trackingNo=${header.tracking_number}&lang=en`}>
+                          <IconButton>
+                            <Icon size='small'>
+                              <SVG src={LinkIcon} />
+                            </Icon>
+                          </IconButton>
+                        </a>
                       </Cell>
                     </TableRow>
                   )}
