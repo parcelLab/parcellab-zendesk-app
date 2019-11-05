@@ -4,18 +4,20 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent, wait } from '@testing-library/react'
 
 import TrackingStatus from '../src/javascripts/modules/trackingstatus'
-import zafClient from '../src/javascripts/lib/zafClient'
+import * as zafclienthelper from '../src/javascripts/lib/zafclienthelper'
+jest.mock('../src/javascripts/lib/zafclienthelper.js')
 
 describe('TrackingStatus Component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    zafClient.metadata = jest.fn().mockReturnValue(Promise.resolve({
+    zafclienthelper.metadata = jest.fn().mockReturnValue(Promise.resolve({
       settings: {
         userId: 'some-user-id',
         orderNumberTicketFieldId: undefined
       }
     }))
-    zafClient.request = jest.fn().mockReturnValue(Promise.resolve(
+    zafclienthelper.resizeContainer = jest.fn()
+    zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockReturnValue(Promise.resolve(
       {
         header: [{
           courier: {
@@ -87,7 +89,7 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should show error message if checkpoints could not be fetched successfully', async () => {
-      zafClient.request = jest.fn().mockRejectedValue('error')
+      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
       await wait(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
@@ -102,7 +104,7 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should close exception message if close button of notification is clicked', async () => {
-      zafClient.request = jest.fn().mockRejectedValue('error')
+      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
       const { getByLabelText, getByText, container, queryByText } = render(<TrackingStatus />)
       await wait(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
@@ -128,7 +130,7 @@ describe('TrackingStatus Component', () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
 
-      zafClient.get = jest.fn().mockReturnValue(Promise.resolve({
+      zafclienthelper.get = jest.fn().mockReturnValue(Promise.resolve({
         'ticket.customField:custom_field_ticketFieldId': 'some-order-number'
       }))
 
@@ -144,10 +146,10 @@ describe('TrackingStatus Component', () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
 
-      zafClient.get = jest.fn().mockReturnValue(Promise.resolve({
+      zafclienthelper.get = jest.fn().mockReturnValue(Promise.resolve({
         'ticket.customField:custom_field_ticketFieldId': 'some-order-number'
       }))
-      zafClient.request = jest.fn().mockRejectedValue('error')
+      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
 
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
@@ -162,7 +164,7 @@ describe('TrackingStatus Component', () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
 
-      zafClient.get = jest.fn().mockReturnValue(Promise.resolve({
+      zafclienthelper.get = jest.fn().mockReturnValue(Promise.resolve({
         'ticket.customField:custom_field_ticketFieldId': ''
       }))
 
@@ -180,10 +182,10 @@ describe('TrackingStatus Component', () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
 
-      zafClient.get = jest.fn().mockReturnValue(Promise.resolve({
+      zafclienthelper.get = jest.fn().mockReturnValue(Promise.resolve({
         'ticket.customField:custom_field_ticketFieldId': 'some-order-number'
       }))
-      zafClient.request = jest.fn().mockRejectedValue('error')
+      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
 
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
@@ -196,7 +198,7 @@ describe('TrackingStatus Component', () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
 
-      zafClient.get = jest.fn().mockRejectedValue('error')
+      zafclienthelper.get = jest.fn().mockRejectedValue('error')
 
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 

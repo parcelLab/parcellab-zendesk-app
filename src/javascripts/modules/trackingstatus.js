@@ -16,8 +16,7 @@ import {
 import { Alert, Close, Title } from '@zendeskgarden/react-notifications'
 
 import I18n from '../lib/i18n'
-import zafClient from '../lib/zafClient'
-import {resizeContainer} from '../lib/helpers'
+import {resizeContainer, get, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
 
 class TrackingStatus extends React.Component {
   constructor (props) {
@@ -35,13 +34,13 @@ class TrackingStatus extends React.Component {
   }
 
   componentDidUpdate () {
-    resizeContainer(zafClient)
+    resizeContainer()
   }
 
   async retrieveOrderNumberFromTicketField (ticketFieldId) {
     try {
       const queryString = `ticket.customField:custom_field_${ticketFieldId}`
-      const orderNumberTicketFieldValue = await zafClient.get(queryString)
+      const orderNumberTicketFieldValue = await get(queryString)
       if (queryString in orderNumberTicketFieldValue) {
         return orderNumberTicketFieldValue[queryString]
       } else {
@@ -58,7 +57,7 @@ class TrackingStatus extends React.Component {
       if (orderNumber && orderNumber.length > 0) {
         try {
           const userId = this.props.userId
-          const response = await this.fetchCheckpointsHeaders(userId, orderNumber)
+          const response = await fetchCheckpointsHeaders(userId, orderNumber)
           this.setState({
             orderHeaders: response.header,
             exception: undefined
@@ -93,7 +92,7 @@ class TrackingStatus extends React.Component {
   }
 
   async componentDidMount () {
-    resizeContainer(zafClient)
+    resizeContainer()
 
     this.attemptAutoFetchOrderStatus()
   }
@@ -102,20 +101,11 @@ class TrackingStatus extends React.Component {
     this.setState({orderNumber: event.target.value})
   }
 
-  fetchCheckpointsHeaders (userId, orderNumber) {
-    const request = {
-      url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${orderNumber}`,
-      type: 'GET',
-      cors: true
-    }
-    return zafClient.request(request)
-  }
-
   async submitForm (event) {
     event.preventDefault()
     try {
       const userId = this.props.userId
-      const response = await this.fetchCheckpointsHeaders(userId, this.state.orderNumber)
+      const response = await fetchCheckpointsHeaders(userId, this.state.orderNumber)
       this.setState({
         orderHeaders: response.header,
         exception: undefined

@@ -1,11 +1,6 @@
 /* eslint-env jest */
-import { resizeContainer, templatingLoop, render, escapeSpecialChars as escape } from '../src/javascripts/lib/helpers'
-import zafClient from '../src/javascripts/lib/zafClient'
+import { templatingLoop, render, escapeSpecialChars as escape } from '../src/javascripts/lib/helpers'
 import createRangePolyfill from './polyfills/createRange'
-
-jest.mock('../src/javascripts/lib/zafClient', () => ({
-  invoke: jest.fn()
-}))
 
 if (!document.createRange) {
   createRangePolyfill()
@@ -15,13 +10,6 @@ const dataSet = [1, 2, 3]
 function mockGetTemplate (item) {
   return `${item}-`
 }
-
-describe('resizeContainer', () => {
-  it('client.invoke has been called', () => {
-    resizeContainer(zafClient)
-    expect(zafClient.invoke).toHaveBeenCalled()
-  })
-})
 
 describe('templatingLoop', () => {
   it('generate html with data set and template function', () => {
