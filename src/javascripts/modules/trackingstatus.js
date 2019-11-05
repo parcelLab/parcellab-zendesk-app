@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@zendeskgarden/react-buttons'
 import { Field, Label, Hint, Input } from '@zendeskgarden/react-forms'
 import { Grid, Row, Col } from '@zendeskgarden/react-grid'
-import { XL, LG } from '@zendeskgarden/react-typography'
+import { XL } from '@zendeskgarden/react-typography'
 import {
   Table,
   Caption,
@@ -55,7 +55,7 @@ class TrackingStatus extends React.Component {
   async attemptAutoFetchOrderStatus () {
     try {
       const orderNumber = await this.retrieveOrderNumberFromTicketField(this.props.orderNumberTicketFieldId)
-      if (orderNumber) {
+      if (orderNumber && orderNumber.length > 0) {
         try {
           const userId = this.props.userId
           const response = await this.fetchCheckpointsHeaders(userId, orderNumber)
@@ -73,6 +73,12 @@ class TrackingStatus extends React.Component {
             }
           })
         }
+      } else {
+        this.setState({
+          showOrderNumberInput: true,
+          orderHeader: [],
+          exception: undefined
+        })
       }
     } catch (e) {
       this.setState({

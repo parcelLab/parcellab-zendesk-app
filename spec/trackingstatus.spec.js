@@ -158,6 +158,24 @@ describe('TrackingStatus Component', () => {
       })
     })
 
+    it('should show submission form if automatically retrieved order number was empty', async () => {
+      const userId = 'some-user-id'
+      const orderNumberTicketFieldId = 'ticketFieldId'
+
+      zafClient.get = jest.fn().mockReturnValue(Promise.resolve({
+        'ticket.customField:custom_field_ticketFieldId': ''
+      }))
+
+      const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
+
+      await wait(() => {
+        expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
+        expect(queryByText(/delivery is being prepared/i)).not.toBeInTheDocument()
+        expect(queryByText(/ready for collection/i)).not.toBeInTheDocument()
+        expect(queryByText(/could not/i)).not.toBeInTheDocument()
+      })
+    })
+
     it('should show error message if automatically fetching of order status based on orderNumberTicketFieldId failed', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
