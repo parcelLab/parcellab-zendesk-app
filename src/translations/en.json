@@ -12,7 +12,7 @@
       },
       "orderNumberTicketFieldId": {
         "label": "Zendesk Ticket Field ID",
-        "helpText": "(Optional field) This is the Zendesk ticket field ID, that if provided will be used by the app to automatically use the order number from the Zendesk ticket you're viewing to fetch the order status. If you don't provide a value here, then you will be prompted to manually enter the order numebr that you would like to check. You can find the Zendesk ticket field ID for all ticket fields in the Zendesk admin overview under the manage / ticket fields section"
+        "helpText": "(Optional field) This is the Zendesk ticket field ID, that if provided will be used by the app to automatically retrieve the order number from the Zendesk ticket and then fetch the order status. If you don't provide a value here, then you will be prompted to manually enter the order number that you would like to check. You can find the Zendesk ticket field ID for any ticket fields in the Zendesk admin overview under the manage / ticket fields section"
       }
     }
   },
