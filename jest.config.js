@@ -2,11 +2,9 @@ module.exports = {
   verbose: true,
   testURL: 'http://localhost/',
   collectCoverage: true,
-  globals: {
-    ZAFClient: {
-      init: () => {}
-    }
-  },
+  setupFiles: [
+    '<rootDir>/spec/jest/globals.js'
+  ],
   coveragePathIgnorePatterns: [
     '<rootDir>/spec'
   ],

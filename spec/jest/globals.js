@@ -1,0 +1,3 @@
+global.ZAFClient = {
+  init: () => ({ invoke: () => {} })
+}

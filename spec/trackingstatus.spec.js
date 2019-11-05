@@ -5,11 +5,6 @@ import { render, fireEvent, wait } from '@testing-library/react'
 
 import TrackingStatus from '../src/javascripts/modules/trackingstatus'
 import zafClient from '../src/javascripts/lib/zafClient'
-jest.mock('../src/javascripts/lib/zafClient', () => {
-  return {
-    invoke: jest.fn()
-  }
-})
 
 describe('TrackingStatus Component', () => {
   beforeEach(() => {
