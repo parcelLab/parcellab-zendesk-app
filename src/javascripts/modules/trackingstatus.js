@@ -16,7 +16,7 @@ import {
 import { Alert, Close, Title } from '@zendeskgarden/react-notifications'
 
 import I18n from '../lib/i18n'
-import {resizeContainer, get, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
+import {resizeContainer, getValueFromCustomTicketField, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
 
 class TrackingStatus extends React.Component {
   constructor (props) {
@@ -33,27 +33,19 @@ class TrackingStatus extends React.Component {
     this.attemptAutoFetchOrderStatus = this.attemptAutoFetchOrderStatus.bind(this)
   }
 
+  async componentDidMount () {
+    resizeContainer()
+
+    this.attemptAutoFetchOrderStatus()
+  }
+
   componentDidUpdate () {
     resizeContainer()
   }
 
-  async retrieveOrderNumberFromTicketField (ticketFieldId) {
-    try {
-      const queryString = `ticket.customField:custom_field_${ticketFieldId}`
-      const orderNumberTicketFieldValue = await get(queryString)
-      if (queryString in orderNumberTicketFieldValue) {
-        return orderNumberTicketFieldValue[queryString]
-      } else {
-        throw new Error(`Unable to get ticket field value from field: ${ticketFieldId}`)
-      }
-    } catch (e) {
-      throw new Error('Unable to retrieve order number from provided ticket field')
-    }
-  }
-
   async attemptAutoFetchOrderStatus () {
     try {
-      const orderNumber = await this.retrieveOrderNumberFromTicketField(this.props.orderNumberTicketFieldId)
+      const orderNumber = await getValueFromCustomTicketField(this.props.orderNumberTicketFieldId)
       if (orderNumber && orderNumber.length > 0) {
         try {
           const userId = this.props.userId
@@ -89,12 +81,6 @@ class TrackingStatus extends React.Component {
         }
       })
     }
-  }
-
-  async componentDidMount () {
-    resizeContainer()
-
-    this.attemptAutoFetchOrderStatus()
   }
 
   updateOrderNumber (event) {

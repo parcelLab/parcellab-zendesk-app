@@ -2,17 +2,13 @@
 import App from '../src/javascripts/modules/app'
 jest.mock('../src/javascripts/lib/zafclienthelper', () => {
   return {
-    metadata: jest.fn().mockReturnValue(Promise.resolve({
-      settings: {
-        userId: '123',
-        orderNumberTickeFieldId: ''
-      }
-    })),
     resizeContainer: jest.fn(),
-    get: jest.fn().mockReturnValue(Promise.resolve({
-      currentUser: {
-        locale: 'en'
-      }
+    getAppSettings: jest.fn().mockReturnValue(Promise.resolve({
+      userId: '123',
+      orderNumberTickeFieldId: ''
+    })),
+    getCurrentUserDetails: jest.fn().mockReturnValue(Promise.resolve({
+      locale: 'en'
     }))
   }
 })

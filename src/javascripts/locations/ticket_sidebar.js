@@ -1,5 +1,5 @@
 
 import App from '../modules/app'
-import client from '../lib/zafclienthelper'
+import {onAppRegistered} from '../lib/zafclienthelper'
 
-client.on('app.registered', appData => new App(appData))
+onAppRegistered(appData => new App(appData))

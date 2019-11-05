@@ -1,5 +1,12 @@
 /* eslint-env jest */
-import {resizeContainer, get, metadata, fetchCheckpointsHeaders} from '../src/javascripts/lib/zafclienthelper'
+import {
+  resizeContainer,
+  getCurrentUserDetails,
+  getAppSettings,
+  getValueFromCustomTicketField,
+  onAppRegistered,
+  fetchCheckpointsHeaders
+} from '../src/javascripts/lib/zafclienthelper'
 
 describe('ZAFClientHelper', () => {
   describe('resizeContainer', () => {
@@ -9,18 +16,33 @@ describe('ZAFClientHelper', () => {
     })
   })
 
-  describe('metadata', () => {
-    it('calls zafClient.matadata', () => {
-      metadata()
+  describe('getCurrentUserDetails', () => {
+    it('returns "currentUser" property from zafClient.get', async () => {
+      const expectedValue = 'expectedValue'
+      global.InitializedZAFClient.get = jest.fn().mockReturnValue(Promise.resolve({
+        currentUser: expectedValue
+      }))
+      await expect(getCurrentUserDetails()).resolves.toBe('expectedValue')
+      expect(global.InitializedZAFClient.get).toHaveBeenCalledWith('currentUser')
+    })
+  })
+
+  describe('getAppSettings', () => {
+    it('returns "settings" property from zafClient.metadata call', async () => {
+      const expectedValue = 'expectedValue'
+      global.InitializedZAFClient.metadata = jest.fn().mockReturnValue(Promise.resolve({
+        settings: expectedValue
+      }))
+      await expect(getAppSettings()).resolves.toBe('expectedValue')
       expect(global.InitializedZAFClient.metadata).toHaveBeenCalled()
     })
   })
 
-  describe('get', () => {
+  describe('onAppRegistered', () => {
     it('calls zafClient.get with correct parameter', () => {
       const param = 'param'
-      get(param)
-      expect(global.InitializedZAFClient.get).toHaveBeenCalledWith(param)
+      onAppRegistered(param)
+      expect(global.InitializedZAFClient.on).toHaveBeenCalledWith('app.registered', param)
     })
   })
 
@@ -34,6 +56,34 @@ describe('ZAFClientHelper', () => {
         type: 'GET',
         cors: true
       })
+    })
+  })
+
+  describe('getValueFromCustomTicketField', () => {
+    it('gets value from custom ticket field', async () => {
+      const customTicketFieldId = 'customTicketFieldId'
+      const customTicketFieldFullName = `ticket.customField:custom_field_${customTicketFieldId}`
+      const ticketValue = 'ticketValue'
+      global.InitializedZAFClient.get = jest.fn().mockReturnValue(Promise.resolve({
+        [customTicketFieldFullName]: ticketValue
+      }))
+
+      const actualValue = await getValueFromCustomTicketField(customTicketFieldId)
+
+      expect(global.InitializedZAFClient.get)
+        .toHaveBeenCalledWith(customTicketFieldFullName)
+      expect(actualValue).toBe(ticketValue)
+    })
+
+    it('throws error if value cannot be retrieved from custom ticket field', async () => {
+      const customTicketFieldId = 'customTicketFieldId'
+      const customTicketFieldFullName = `ticket.customField:custom_field_${customTicketFieldId}`
+      global.InitializedZAFClient.get = jest.fn().mockReturnValue(Promise.resolve({}))
+
+      await expect(getValueFromCustomTicketField(customTicketFieldId)).rejects.toThrowError()
+
+      expect(global.InitializedZAFClient.get)
+        .toHaveBeenCalledWith(customTicketFieldFullName)
     })
   })
 })
