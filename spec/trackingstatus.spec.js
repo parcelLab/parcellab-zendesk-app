@@ -120,7 +120,7 @@ describe('TrackingStatus Component', () => {
       })
     })
 
-    it('should close error message if close button of error notification is clicked', async () => {
+    it('should close exception message if close button of notification is clicked', async () => {
       zafClient.request = jest.fn().mockRejectedValue('error')
       const { getByLabelText, getByText, container, queryByText } = render(<TrackingStatus />)
       await wait(() => {
@@ -134,7 +134,7 @@ describe('TrackingStatus Component', () => {
         expect(getByText(/could not be found/i)).toBeInTheDocument()
       })
 
-      fireEvent.click(getByLabelText(/close error notification/i))
+      fireEvent.click(getByLabelText(/close notification/i))
 
       await wait(() => {
         expect(queryByText(/could not be found/i)).not.toBeInTheDocument()
@@ -144,18 +144,14 @@ describe('TrackingStatus Component', () => {
 
   describe('order number automatically provided through Zendesk ticket field', () => {
     it('should automatically fetch order status for each parcel if orderNumberTicketFieldId is provided', async () => {
-      zafClient.metadata = jest.fn().mockReturnValue(Promise.resolve({
-        settings: {
-          userId: 'some-user-id',
-          orderNumberTicketFieldId: 'ticketFieldId'
-        }
-      }))
+      const userId = 'some-user-id'
+      const orderNumberTicketFieldId = 'ticketFieldId'
 
       zafClient.get = jest.fn().mockReturnValue(Promise.resolve({
         'ticket.customField:custom_field_ticketFieldId': 'some-order-number'
       }))
 
-      const { queryByText } = render(<TrackingStatus />)
+      const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
         expect(queryByText(/delivery is being prepared/i)).toBeInTheDocument()
@@ -164,23 +160,49 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should show submission form if automatically fetching of order status based on orderNumberTicketFieldId failed', async () => {
-      zafClient.metadata = jest.fn().mockReturnValue(Promise.resolve({
-        settings: {
-          userId: 'some-user-id',
-          orderNumberTicketFieldId: 'ticketFieldId'
-        }
-      }))
+      const userId = 'some-user-id'
+      const orderNumberTicketFieldId = 'ticketFieldId'
+
       zafClient.get = jest.fn().mockReturnValue(Promise.resolve({
         'ticket.customField:custom_field_ticketFieldId': 'some-order-number'
       }))
       zafClient.request = jest.fn().mockRejectedValue('error')
 
-      const { queryByText, container } = render(<TrackingStatus />)
+      const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
         expect(queryByText(/delivery is being prepared/i)).not.toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).not.toBeInTheDocument()
+      })
+    })
+
+    it('should show error message if automatically fetching of order status based on orderNumberTicketFieldId failed', async () => {
+      const userId = 'some-user-id'
+      const orderNumberTicketFieldId = 'ticketFieldId'
+
+      zafClient.get = jest.fn().mockReturnValue(Promise.resolve({
+        'ticket.customField:custom_field_ticketFieldId': 'some-order-number'
+      }))
+      zafClient.request = jest.fn().mockRejectedValue('error')
+
+      const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
+
+      await wait(() => {
+        expect(queryByText(/ticket order number status could not be found/i)).toBeInTheDocument()
+      })
+    })
+
+    it('should show warn message if orderNumberTicketFieldId value retrieval failed', async () => {
+      const userId = 'some-user-id'
+      const orderNumberTicketFieldId = 'ticketFieldId'
+
+      zafClient.get = jest.fn().mockRejectedValue('error')
+
+      const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
+
+      await wait(() => {
+        expect(queryByText(/could not automatically retrieve order number from zendesk ticket/i)).toBeInTheDocument()
       })
     })
   })

@@ -27,60 +27,76 @@ class TrackingStatus extends React.Component {
       showOrderNumberInput: false,
       orderNumber: '',
       orderHeaders: undefined,
-      error: undefined
+      exception: undefined
     }
     this.updateOrderNumber = this.updateOrderNumber.bind(this)
     this.submitForm = this.submitForm.bind(this)
-    this.fetchOrderStatus = this.fetchOrderStatus.bind(this)
+    this.attemptAutoFetchOrderStatus = this.attemptAutoFetchOrderStatus.bind(this)
   }
 
   componentDidUpdate () {
     resizeContainer(zafClient)
   }
-  async componentDidMount () {
-    resizeContainer(zafClient)
 
+  async retrieveOrderNumberFromTicketField (ticketFieldId) {
     try {
-      const userId = (await zafClient.metadata()).settings.userId
-      const orderNumberTicketFieldId = (await zafClient.metadata()).settings.orderNumberTicketFieldId
-      const queryString = `ticket.customField:custom_field_${orderNumberTicketFieldId}`
+      const queryString = `ticket.customField:custom_field_${ticketFieldId}`
       const orderNumberTicketFieldValue = await zafClient.get(queryString)
-      const orderNumber = orderNumberTicketFieldValue ? orderNumberTicketFieldValue[queryString] : undefined
-      const response = await this.fetchCheckpointsHeaders(userId, orderNumber)
-      this.setState({
-        orderHeaders: response.header,
-        error: undefined
-      })
+      if (queryString in orderNumberTicketFieldValue) {
+        return orderNumberTicketFieldValue[queryString]
+      } else {
+        throw new Error(`Unable to get ticket field value from field: ${ticketFieldId}`)
+      }
+    } catch (e) {
+      throw new Error('Unable to retrieve order number from provided ticket field')
+    }
+  }
+
+  async attemptAutoFetchOrderStatus () {
+    try {
+      const orderNumber = await this.retrieveOrderNumberFromTicketField(this.props.orderNumberTicketFieldId)
+      if (orderNumber) {
+        try {
+          const userId = this.props.userId
+          const response = await this.fetchCheckpointsHeaders(userId, orderNumber)
+          this.setState({
+            orderHeaders: response.header,
+            exception: undefined
+          })
+        } catch (e) {
+          this.setState({
+            showOrderNumberInput: true,
+            orderHeader: [],
+            exception: {
+              type: 'error',
+              message: I18n.t('trackingStatus.error.automaticFetch.message')
+            }
+          })
+        }
+      }
     } catch (e) {
       this.setState({
         showOrderNumberInput: true,
         orderHeader: [],
-        error: I18n.t('trackingStatus.error.automaticFetch.message')
+        exception: {
+          type: 'warning',
+          message: I18n.t('trackingStatus.warning.invalidOrderNumberTicketFieldId.message')
+        }
       })
     }
+  }
+
+  async componentDidMount () {
+    resizeContainer(zafClient)
+
+    this.attemptAutoFetchOrderStatus()
   }
 
   updateOrderNumber (event) {
     this.setState({orderNumber: event.target.value})
   }
 
-  async fetchOrderStatus (orderNumber) {
-    try {
-      const userId = (await zafClient.metadata()).settings.userId
-      const response = await this.fetchCheckpointsHeaders(userId, orderNumber)
-      this.setState({
-        orderHeaders: response.header,
-        error: undefined
-      })
-    } catch (error) {
-      this.setState({
-        orderHeader: [],
-        error: I18n.t('trackingStatus.error.manualFetch.message')
-      })
-    }
-  }
-
-  async fetchCheckpointsHeaders (userId, orderNumber) {
+  fetchCheckpointsHeaders (userId, orderNumber) {
     const request = {
       url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${orderNumber}`,
       type: 'GET',
@@ -91,7 +107,22 @@ class TrackingStatus extends React.Component {
 
   async submitForm (event) {
     event.preventDefault()
-    this.fetchOrderStatus(this.state.orderNumber)
+    try {
+      const userId = this.props.userId
+      const response = await this.fetchCheckpointsHeaders(userId, this.state.orderNumber)
+      this.setState({
+        orderHeaders: response.header,
+        exception: undefined
+      })
+    } catch (error) {
+      this.setState({
+        orderHeader: [],
+        exception: {
+          type: 'error',
+          message: I18n.t('trackingStatus.error.manualFetch.message')
+        }
+      })
+    }
   }
 
   render () {
@@ -124,19 +155,19 @@ class TrackingStatus extends React.Component {
             </Row>
           </React.Fragment>
           }
-          {this.state.error && <Row>
+          {this.state.exception && <Row>
             <Col md={12} style={{marginTop: '50px'}}>
-              <Alert type='error'>
-                <Title>{I18n.t('trackingStatus.error.title')}</Title>
-                {this.state.error}
-                <Close id='root' onClick={() => this.setState({error: undefined})} aria-label={I18n.t('trackingStatus.error.close-aria-label')} />
+              <Alert type={this.state.exception.type}>
+                <Title>{I18n.t(`trackingStatus.${this.state.exception.type}.title`)}</Title>
+                {this.state.exception.message}
+                <Close id='root' onClick={() => this.setState({exception: undefined})} aria-label={I18n.t('trackingStatus.exception.close-aria-label')} />
               </Alert>
             </Col>
           </Row>}
-          { !this.state.error && this.state.orderHeaders &&
+          { !this.state.exception && this.state.orderHeaders &&
           <Row>
             <Col>
-              <Table size='small' style={{marginTop: '50px'}}>
+              <Table size='small' style={{marginTop: '25px'}}>
                 <XL tag={Caption}>
                   {I18n.t('trackingStatus.orderStatus')}
                 </XL>

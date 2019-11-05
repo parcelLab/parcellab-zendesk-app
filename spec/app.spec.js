@@ -3,6 +3,12 @@ import App from '../src/javascripts/modules/app'
 jest.mock('../src/javascripts/lib/zafClient', () => {
   return {
     invoke: jest.fn(),
+    metadata: jest.fn().mockReturnValue(Promise.resolve({
+      settings: {
+        userId: '123',
+        orderNumberTickeFieldId: ''
+      }
+    })),
     get: jest.fn().mockReturnValue(Promise.resolve({
       currentUser: {
         name: 'Timmy Testface'

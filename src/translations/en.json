@@ -1,13 +1,18 @@
 {
   "app": {
-    "name": "Example App",
-    "short_description": "Short Description",
-    "long_description": "Long Description",
+    "name": "parcelLab",
+    "short_description": "Checks parcelLab order status based on order number",
+    "long_description": "Integration with parcelLab API that allows automatic retrieval of most current oder status, based on order number. The order number can either be entered manually or configured to be automatically retrieved from a Zendesk ticket field.",
     "installation_instructions": "Configure the following app settings, then click Install:...",
-    "title": "Example App",
+    "title": "parcelLab",
     "parameters": {
       "userId": {
-        "label": "Your parcelLab userId"
+        "label": "parcelLab userId",
+        "helpText": "This is your parcelLab userId. If you're unsure what your parcelLab userId is, you can find it in the account section of the parcelLab portal."
+      },
+      "orderNumberTicketFieldId": {
+        "label": "Zendesk Ticket Field ID",
+        "helpText": "(Optional field) This is the Zendesk ticket field ID, that if provided will be used by the app to automatically use the order number from the Zendesk ticket you're viewing to fetch the order status. If you don't provide a value here, then you will be prompted to manually enter the order numebr that you would like to check. You can find the Zendesk ticket field ID for all ticket fields in the Zendesk admin overview under the manage / ticket fields section"
       }
     }
   },
@@ -19,7 +24,9 @@
   "trackingStatus.trackingNumber": "Tracking Number",
   "trackingStatus.orderStatus": "Order status",
   "trackingStatus.error.title": "Error",
-  "trackingStatus.error.automaticFetch.message": "Ticket Order Number Status Could Not Be Found",
-  "trackingStatus.error.manualFetch.message": "Entered Order Number Status Could Not Be Found",
-  "trackingStatus.error.close-aria-label": "Close Error Notification"
+  "trackingStatus.warning.title": "Warning",
+  "trackingStatus.error.automaticFetch.message": "Ticket order number status could not be found. Please verify that order number is valid.",
+  "trackingStatus.error.manualFetch.message": "Entered order number status could not be found. Please verify that order number is valid.",
+  "trackingStatus.warning.invalidOrderNumberTicketFieldId.message": "Could not automatically retrieve order number from Zendesk ticket. Please ensure that the configured order number ticket field ID is valid.",
+  "trackingStatus.exception.close-aria-label": "Close Notification"
 }
