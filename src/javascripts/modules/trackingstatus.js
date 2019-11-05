@@ -126,19 +126,11 @@ class TrackingStatus extends React.Component {
   }
 
   render () {
-    const currentUser = this.props.currentUser
     return <div>
       <form onSubmit={this.submitForm}>
         <Grid>
           {this.state.showOrderNumberInput &&
           <React.Fragment>
-            <Row>
-              <Col md={12}>
-                <LG tag='h1'>
-                  {I18n.t('trackingStatus.greeting', {username: currentUser})}
-                </LG>
-              </Col>
-            </Row>
             <Row>
               <Col md={12}>
                 <Field stretched>

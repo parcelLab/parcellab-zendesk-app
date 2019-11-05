@@ -11,7 +11,7 @@ jest.mock('../src/javascripts/lib/zafClient', () => {
     })),
     get: jest.fn().mockReturnValue(Promise.resolve({
       currentUser: {
-        name: 'Timmy Testface'
+        locale: 'en'
       }
     }))
   }
@@ -26,7 +26,6 @@ describe('ParcelLab App', () => {
 
     it('should render main stage with data', () => {
       expect(document.querySelector('#root')).not.toBe(null)
-      expect(document.querySelector('h1').textContent).toContain('Hello Timmy Testface')
     })
   })
 })

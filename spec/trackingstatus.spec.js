@@ -38,20 +38,6 @@ describe('TrackingStatus Component', () => {
     ))
   })
 
-  it('should render without a currentUser', async () => {
-    const {getByText} = render(<TrackingStatus />)
-    await wait(() => {
-      expect(getByText('Hello ! What order would you like to check?')).toBeInTheDocument()
-    })
-  })
-
-  it('should render with a currentUser', async () => {
-    const {getByText} = render(<TrackingStatus currentUser='Timmy Testface' />)
-    await wait(() => {
-      expect(getByText('Hello Timmy Testface! What order would you like to check?')).toBeInTheDocument()
-    })
-  })
-
   describe('order number manually provided through order number form field', () => {
     it('should show order status for each parcel if checkpoints have been fetched successfully', async () => {
       const { getByLabelText, queryByText, container } = render(<TrackingStatus />)
