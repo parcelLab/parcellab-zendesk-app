@@ -176,7 +176,7 @@ describe('TrackingStatus Component', () => {
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
-        expect(queryByText(/ticket order number status could not be found/i)).toBeInTheDocument()
+        expect(queryByText(/order number status could not be found/i)).toBeInTheDocument()
       })
     })
 

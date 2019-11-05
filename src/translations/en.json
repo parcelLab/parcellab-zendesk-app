@@ -24,8 +24,7 @@
   "trackingStatus.orderStatus": "Order status",
   "trackingStatus.error.title": "Error",
   "trackingStatus.warning.title": "Warning",
-  "trackingStatus.error.automaticFetch.message": "Ticket order number status could not be found. Please verify that order number is valid.",
-  "trackingStatus.error.manualFetch.message": "Entered order number status could not be found. Please verify that order number is valid.",
+  "trackingStatus.error.fetch.message": "Order number status could not be found. Please verify that order number is valid.",
   "trackingStatus.warning.invalidOrderNumberTicketFieldId.message": "Could not automatically retrieve order number from Zendesk ticket. Please ensure that the configured order number ticket field ID is valid.",
   "trackingStatus.exception.close-aria-label": "Close Notification"
 }

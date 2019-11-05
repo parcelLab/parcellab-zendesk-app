@@ -31,11 +31,11 @@ class TrackingStatus extends React.Component {
     this.updateOrderNumber = this.updateOrderNumber.bind(this)
     this.submitForm = this.submitForm.bind(this)
     this.attemptAutoFetchOrderStatus = this.attemptAutoFetchOrderStatus.bind(this)
+    this.fetchOrderStatus = this.fetchOrderStatus.bind(this)
   }
 
-  async componentDidMount () {
+  componentDidMount () {
     resizeContainer()
-
     this.attemptAutoFetchOrderStatus()
   }
 
@@ -47,23 +47,7 @@ class TrackingStatus extends React.Component {
     try {
       const orderNumber = await getValueFromCustomTicketField(this.props.orderNumberTicketFieldId)
       if (orderNumber && orderNumber.length > 0) {
-        try {
-          const userId = this.props.userId
-          const response = await fetchCheckpointsHeaders(userId, orderNumber)
-          this.setState({
-            orderHeaders: response.header,
-            exception: undefined
-          })
-        } catch (e) {
-          this.setState({
-            showOrderNumberInput: true,
-            orderHeader: [],
-            exception: {
-              type: 'error',
-              message: I18n.t('trackingStatus.error.automaticFetch.message')
-            }
-          })
-        }
+        this.fetchOrderStatus(orderNumber)
       } else {
         this.setState({
           showOrderNumberInput: true,
@@ -87,24 +71,29 @@ class TrackingStatus extends React.Component {
     this.setState({orderNumber: event.target.value})
   }
 
-  async submitForm (event) {
-    event.preventDefault()
+  async fetchOrderStatus (orderNumber) {
     try {
       const userId = this.props.userId
-      const response = await fetchCheckpointsHeaders(userId, this.state.orderNumber)
+      const response = await fetchCheckpointsHeaders(userId, orderNumber)
       this.setState({
         orderHeaders: response.header,
         exception: undefined
       })
     } catch (error) {
       this.setState({
+        showOrderNumberInput: true,
         orderHeader: [],
         exception: {
           type: 'error',
-          message: I18n.t('trackingStatus.error.manualFetch.message')
+          message: I18n.t('trackingStatus.error.fetch.message')
         }
       })
     }
+  }
+
+  async submitForm (event) {
+    event.preventDefault()
+    this.fetchOrderStatus(this.state.orderNumber)
   }
 
   render () {
