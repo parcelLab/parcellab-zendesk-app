@@ -1,6 +1,5 @@
 /* eslint-env jest, browser */
 import React from 'react'
-import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent, wait } from '@testing-library/react'
 
 import TrackingStatus from '../src/javascripts/modules/trackingstatus'

@@ -5,6 +5,9 @@ module.exports = {
   setupFiles: [
     '<rootDir>/spec/jest/globals.js'
   ],
+  setupFilesAfterEnv: [
+    '<rootDir>/spec/jest/globalImports.js'
+  ],
   coveragePathIgnorePatterns: [
     '<rootDir>/spec'
   ],

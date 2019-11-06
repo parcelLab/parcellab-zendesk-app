@@ -1,4 +1,3 @@
-
 import App from '../modules/app'
 import {onAppRegistered} from '../lib/zafclienthelper'
 
