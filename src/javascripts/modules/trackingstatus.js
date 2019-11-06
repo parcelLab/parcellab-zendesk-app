@@ -150,7 +150,7 @@ class TrackingStatus extends React.Component {
                       href={`https://prtl.parcellab.com/trackings/details?trackingNo=${header.tracking_number}&courier=${header.courier.name}`}
                     >
                       <TableRow>
-                        <Cell style={{wordBreak: 'break-all'}} width='50'>{header.tracking_number}</Cell>
+                        <Cell style={{wordBreak: 'break-all'}} width='50%'>{header.tracking_number}</Cell>
                         <Cell width='50%'>{header.last_delivery_status.status}</Cell>
                       </TableRow>
                     </a>
