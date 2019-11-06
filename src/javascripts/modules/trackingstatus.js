@@ -99,10 +99,9 @@ class TrackingStatus extends React.Component {
 
   render () {
     return <div>
-      <form onSubmit={this.submitForm}>
-        <Grid>
-          {this.state.showOrderNumberInput &&
-          <React.Fragment>
+      <Grid>
+        {this.state.showOrderNumberInput &&
+          <form onSubmit={this.submitForm}>
             <Row>
               <Col md={12}>
                 <Field stretched>
@@ -117,18 +116,18 @@ class TrackingStatus extends React.Component {
                 <Button disabled={this.state.orderNumber.length === 0} stretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
               </Col>
             </Row>
-          </React.Fragment>
-          }
-          {this.state.exception && <Row>
-            <Col md={12} style={{marginTop: '50px'}}>
-              <Alert type={this.state.exception.type}>
-                <Title>{I18n.t(`trackingStatus.${this.state.exception.type}.title`)}</Title>
-                {this.state.exception.message}
-                <Close id='root' onClick={() => this.setState({exception: undefined})} aria-label={I18n.t('trackingStatus.exception.close-aria-label')} />
-              </Alert>
-            </Col>
-          </Row>}
-          { !this.state.exception && this.state.orderHeaders &&
+          </form>
+        }
+        {this.state.exception && <Row>
+          <Col md={12} style={{marginTop: '50px'}}>
+            <Alert type={this.state.exception.type}>
+              <Title>{I18n.t(`trackingStatus.${this.state.exception.type}.title`)}</Title>
+              {this.state.exception.message}
+              <Close id='root' onClick={() => this.setState({exception: undefined})} aria-label={I18n.t('trackingStatus.exception.close-aria-label')} />
+            </Alert>
+          </Col>
+        </Row>}
+        { !this.state.exception && this.state.orderHeaders &&
           <Row>
             <Col>
               <Table size='small' style={{marginTop: '25px'}}>
@@ -160,8 +159,7 @@ class TrackingStatus extends React.Component {
               </Table>
             </Col>
           </Row>}
-        </Grid>
-      </form>
+      </Grid>
     </div>
   }
 }
