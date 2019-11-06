@@ -32,6 +32,7 @@ class TrackingStatus extends React.Component {
     this.submitForm = this.submitForm.bind(this)
     this.attemptAutoFetchOrderStatus = this.attemptAutoFetchOrderStatus.bind(this)
     this.fetchOrderStatus = this.fetchOrderStatus.bind(this)
+    this.resetForm = this.resetForm.bind(this)
   }
 
   componentDidMount () {
@@ -43,27 +44,31 @@ class TrackingStatus extends React.Component {
     resizeContainer()
   }
 
+  resetForm (exception) {
+    this.setState({
+      showOrderNumberInput: true,
+      orderHeader: [],
+      exception: exception
+    })
+  }
+
   async attemptAutoFetchOrderStatus () {
-    try {
-      const orderNumber = await getValueFromCustomTicketField(this.props.orderNumberTicketFieldId)
-      if (orderNumber && orderNumber.length > 0) {
-        this.fetchOrderStatus(orderNumber)
-      } else {
-        this.setState({
-          showOrderNumberInput: true,
-          orderHeader: [],
-          exception: undefined
-        })
-      }
-    } catch (e) {
-      this.setState({
-        showOrderNumberInput: true,
-        orderHeader: [],
-        exception: {
+    if (this.props.orderNumberTicketFieldId) {
+      try {
+        const orderNumber = await getValueFromCustomTicketField(this.props.orderNumberTicketFieldId)
+        if (orderNumber) {
+          this.fetchOrderStatus(orderNumber)
+        } else {
+          this.resetForm()
+        }
+      } catch (e) {
+        this.resetForm({
           type: 'warning',
           message: I18n.t('trackingStatus.warning.invalidOrderNumberTicketFieldId.message')
-        }
-      })
+        })
+      }
+    } else {
+      this.resetForm()
     }
   }
 
@@ -80,13 +85,9 @@ class TrackingStatus extends React.Component {
         exception: undefined
       })
     } catch (error) {
-      this.setState({
-        showOrderNumberInput: true,
-        orderHeader: [],
-        exception: {
-          type: 'error',
-          message: I18n.t('trackingStatus.error.fetch.message')
-        }
+      this.resetForm({
+        type: 'error',
+        message: I18n.t('trackingStatus.error.fetch.message')
       })
     }
   }
@@ -98,6 +99,7 @@ class TrackingStatus extends React.Component {
 
   render () {
     return <div>
+      cheese
       <form onSubmit={this.submitForm}>
         <Grid>
           {this.state.showOrderNumberInput &&

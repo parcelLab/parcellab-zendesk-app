@@ -149,7 +149,7 @@ describe('TrackingStatus Component', () => {
       })
     })
 
-    it('should show submission form if automatically retrieved order number was empty', async () => {
+    it('should show submission form if automatically retrieved order number from configured orderNumbterTicketFieldId was empty', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
 
@@ -161,7 +161,21 @@ describe('TrackingStatus Component', () => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
         expect(queryByText(/delivery is being prepared/i)).not.toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).not.toBeInTheDocument()
-        expect(queryByText(/could not/i)).not.toBeInTheDocument()
+        expect(queryByText(/could not automatically retrieve/i)).not.toBeInTheDocument()
+      })
+    })
+
+    it('should show submission form and no error if orderNumberTicketFieldId is not configured (i.e. empty)', async () => {
+      const userId = 'some-user-id'
+      const orderNumberTicketFieldId = ''
+
+      const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
+
+      await wait(() => {
+        expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
+        expect(queryByText(/delivery is being prepared/i)).not.toBeInTheDocument()
+        expect(queryByText(/ready for collection/i)).not.toBeInTheDocument()
+        expect(queryByText(/could not automatically retrieve/i)).not.toBeInTheDocument()
       })
     })
 
