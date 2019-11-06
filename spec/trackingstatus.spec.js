@@ -67,6 +67,20 @@ describe('TrackingStatus Component', () => {
       })
     })
 
+    it('should provide direct link to parcelLab portal for each fetched tracking number', async () => {
+      const { getByLabelText, container } = render(<TrackingStatus />)
+      await wait(() => {
+        expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
+      })
+
+      fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+      fireEvent.click(container.querySelector('Button[type=submit]'))
+
+      await wait(() => {
+        expect(container.querySelector('a')).toHaveAttribute('href', 'https://prtl.parcellab.com/trackings/details?trackingNo=trackingNummber1&courier=dhl')
+      })
+    })
+
     it('should have a disabled check button if input field is empty', async () => {
       const { getByLabelText, container } = render(<TrackingStatus />)
       await wait(() => {
@@ -130,6 +144,19 @@ describe('TrackingStatus Component', () => {
       await wait(() => {
         expect(queryByText(/delivery is being prepared/i)).toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).toBeInTheDocument()
+      })
+    })
+
+    it('should provide direct link to parcelLab portal for each fetched tracking number', async () => {
+      const userId = 'some-user-id'
+      const orderNumberTicketFieldId = 'ticketFieldId'
+
+      zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
+
+      const { container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
+
+      await wait(() => {
+        expect(container.querySelector('a')).toHaveAttribute('href', 'https://prtl.parcellab.com/trackings/details?trackingNo=trackingNummber1&courier=dhl')
       })
     })
 
