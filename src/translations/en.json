@@ -8,11 +8,11 @@
     "parameters": {
       "userId": {
         "label": "parcelLab userId",
-        "helpText": "This is your parcelLab userId. If you're unsure what your parcelLab userId is, you can find it in the account section of the parcelLab portal."
+        "helpText": "This is your parcelLab userId. You can find your parcelLab userId in the account section of the parcelLab portal."
       },
       "orderNumberTicketFieldId": {
-        "label": "Zendesk Ticket Field ID",
-        "helpText": "(Optional field) This is the Zendesk ticket field ID, that if provided will be used by the app to automatically retrieve the order number from the Zendesk ticket and then fetch the order status. If you don't provide a value here, then you will be prompted to manually enter the order number that you would like to check. You can find the Zendesk ticket field ID for any ticket fields in the Zendesk admin overview under the manage / ticket fields section"
+        "label": "(optional) Zendesk Ticket Field ID for automatic order number retrieval",
+        "helpText": "(Optional field) This is the Zendesk ticket field ID that should correspond to the order number ticket field id of your Zendesk support tickets. This number is a random numerical identifier that can be found in the Zendesk admin overview under the manage / ticket fields section. If you specify this ticket field ID, then the parcelLab Zendesk app will automatically retrieve the order number from the Zendesk ticket and subsequently fetch the corresponding order status from parcelLab. If you don't specify a ticket field ID, then you will be prompted to manually enter the order number you would like to check."
       }
     }
   },
