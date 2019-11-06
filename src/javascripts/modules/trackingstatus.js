@@ -99,7 +99,6 @@ class TrackingStatus extends React.Component {
 
   render () {
     return <div>
-      cheese
       <form onSubmit={this.submitForm}>
         <Grid>
           {this.state.showOrderNumberInput &&
