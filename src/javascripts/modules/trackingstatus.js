@@ -145,7 +145,7 @@ class TrackingStatus extends React.Component {
                   { this.state.orderHeaders.map((header, index) =>
                     <a key={index} style={{color: 'inherit', textDecoration: 'inherit'}} target='_blank' rel='noopener' href={`https://www.delivery-status.com/?courier=${header.courier.name}&trackingNo=${header.tracking_number}&lang=en`}>
                       <TableRow>
-                        <Cell width='50'>{header.tracking_number}</Cell>
+                        <Cell style={{wordBreak: 'break-all'}} width='50'>{header.tracking_number}</Cell>
                         <Cell width='50%'>{header.last_delivery_status.status}</Cell>
                       </TableRow>
                     </a>
