@@ -13,10 +13,6 @@ jest.mock('../src/translations/en', () => {
   return mockEN
 })
 
-jest.mock('../src/translations/fr', () => {
-  throw new Error('no such file')
-})
-
 describe('i18n', () => {
   beforeAll(() => {
     i18n.loadTranslations('en')
@@ -29,7 +25,7 @@ describe('i18n', () => {
     })
 
     it('returns null if the file doesn\'t exist', () => {
-      const result = i18n.tryRequire('fr')
+      const result = i18n.tryRequire('thisisnotalanguage')
       expect(result).toBe(null)
     })
   })
