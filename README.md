@@ -3,6 +3,10 @@
 A Zendesk ticket sidebar app to check order status via parcelLab API.
 Project structure is based on [zendesk/app_scaffold](https://github.com/zendesk/app_scaffold)
 
+## Support
+
+If you have any specifc questions, please feel free to contact Andre (hmmmsausages / andre@parcellab.com)
+
 ## Prerequisite
 
 To successfully test the integration of this Zendesk with a live Zendesk portal and package the Zendesk app for a production release, you will need the Zendesk app tools (`zat`), which is a CLI Ruby app.
@@ -39,3 +43,18 @@ It's also worthwhile to check out the following resources, so you get an idea ho
 1. `npm run build`
 1. `zat validate -p dist` - Validates the app against Zendesk's quality profile. If no errors or warnings are shown, the app should be runnable.
 1. `zat package -p dist` - This will package the app into a zip file and place it in `./dist/tmp/*`. The zip file can then be used to release the app in the Zendesk marketplace.
+
+## General App Structure
+
+*Note:* Zendesk enforces the mandatory existence of some files and their folder structure. This is mainly for I18N and Zendesk marketplace documentation purposes: Please see [developer.zendesk.com/apps/docs/developer-guide/setup#file-requirements](https://developer.zendesk.com/apps/docs/developer-guide/setup#file-requirements) for more information
+
+- src: contains all Zendesk app Javascript & React source code
+  - image: contains all images. *Note:* that some images are mandatory and required by Zendesk even though they're are not actively used in the source code
+  - javascripts
+    - lib: contains all non React helper functions
+    - locations: defines the app location in Zendesk
+    - modules: contains all React components
+  - templates: contains the iframe HTML base structure for the Zendesk app
+  - translations: contains all language files for I18N. *Note:* `en.json` is mandatory
+- spec: contains all Jest tests (unit/integration)
+- webpack: contains webpack helper functions
