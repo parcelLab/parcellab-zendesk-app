@@ -53,7 +53,6 @@ It's also worthwhile to check out the following resources, so you get an idea ho
   - image: contains all images. *Note:* that some images are mandatory and required by Zendesk even though they're are not actively used in the source code
   - javascripts
     - lib: contains all non React helper functions
-    - locations: defines the app location in Zendesk
     - modules: contains all React components
   - templates: contains the iframe HTML base structure for the Zendesk app
   - translations: contains all language files for I18N. *Note:* `en.json` is mandatory

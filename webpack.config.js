@@ -14,7 +14,7 @@ const externalAssets = {
 module.exports = {
   entry: {
     app: [
-      './src/javascripts/locations/ticket_sidebar.js',
+      './src/index.js',
       './src/index.css'
     ]
   },
