@@ -1,2 +1,7 @@
+# Test configuration settings that will be used for the Zendesk app configuration
+# when running `zat serve -p dist` locally
+
+# userId of parcelFashion
 userId: 1612197
+# ticket field ID of 'order number' ticket field of d3v-parcellab Zendesk support board
 orderNumberTicketFieldId: 360003921997
