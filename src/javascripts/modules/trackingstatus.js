@@ -21,7 +21,7 @@ class TrackingStatus extends React.Component {
     this.submitForm = this.submitForm.bind(this)
     this.attemptAutoFetchOrderStatus = this.attemptAutoFetchOrderStatus.bind(this)
     this.fetchOrderStatus = this.fetchOrderStatus.bind(this)
-    this.resetForm = this.resetForm.bind(this)
+    this.resetFetchedOrderStatus = this.resetFetchedOrderStatus.bind(this)
   }
 
   componentDidMount () {
@@ -33,7 +33,7 @@ class TrackingStatus extends React.Component {
     resizeContainer()
   }
 
-  resetForm (exception) {
+  resetFetchedOrderStatus (exception) {
     this.setState({
       showOrderNumberInput: true,
       orderHeader: [],
@@ -48,16 +48,16 @@ class TrackingStatus extends React.Component {
         if (orderNumber) {
           this.fetchOrderStatus(orderNumber)
         } else {
-          this.resetForm()
+          this.resetFetchedOrderStatus()
         }
       } catch (e) {
-        this.resetForm({
+        this.resetFetchedOrderStatus({
           type: 'warning',
           message: I18n.t('trackingStatus.warning.invalidOrderNumberTicketFieldId.message')
         })
       }
     } else {
-      this.resetForm()
+      this.resetFetchedOrderStatus()
     }
   }
 
@@ -74,7 +74,7 @@ class TrackingStatus extends React.Component {
         exception: undefined
       })
     } catch (error) {
-      this.resetForm({
+      this.resetFetchedOrderStatus({
         type: 'error',
         message: I18n.t('trackingStatus.error.fetch.message')
       })
