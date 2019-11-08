@@ -14,7 +14,7 @@ const ExceptionNotification = ({exception, onClose}) => {
 
 ExceptionNotification.propTypes = {
   exception: PropTypes.shape({
-    type: PropTypes.oneOf(['error', 'warn', 'info']).isRequired,
+    type: PropTypes.oneOf(['error', 'warning', 'info']).isRequired,
     message: PropTypes.string.isRequired
   }).isRequired,
   onClose: PropTypes.func.isRequired

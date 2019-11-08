@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { XL } from '@zendeskgarden/react-typography'
 import {
   Table,
@@ -43,6 +44,18 @@ const OrderStatus = ({orderHeader}) => {
       )}
     </Body>
   </Table>
+}
+
+OrderStatus.propTypes = {
+  orderheader: PropTypes.arrayOf({
+    tracking_number: PropTypes.string.isRequired,
+    courier: PropTypes.shape({
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    last_delivery_status: PropTypes.shape({
+      status: PropTypes.string.isRequired
+    }).isRequired
+  })
 }
 
 export default OrderStatus
