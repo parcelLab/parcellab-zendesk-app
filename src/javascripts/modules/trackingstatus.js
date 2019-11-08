@@ -1,21 +1,11 @@
 import React from 'react'
 import { Grid, Row, Col } from '@zendeskgarden/react-grid'
-import { XL } from '@zendeskgarden/react-typography'
-import {
-  Table,
-  Caption,
-  Head,
-  HeaderRow,
-  HeaderCell,
-  Body,
-  Row as TableRow,
-  Cell
-} from '@zendeskgarden/react-tables'
 
 import I18n from '../lib/i18n'
+import {resizeContainer, getValueFromCustomTicketField, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
 import ExceptionNotification from './exceptionnotification'
 import OrderNumberInputForm from './ordernumberinput'
-import {resizeContainer, getValueFromCustomTicketField, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
+import OrderStatus from './orderstatus'
 
 class TrackingStatus extends React.Component {
   constructor (props) {
@@ -24,7 +14,7 @@ class TrackingStatus extends React.Component {
     this.state = {
       showOrderNumberInput: false,
       orderNumber: '',
-      orderHeaders: undefined,
+      orderHeader: undefined,
       exception: undefined
     }
     this.updateOrderNumber = this.updateOrderNumber.bind(this)
@@ -80,7 +70,7 @@ class TrackingStatus extends React.Component {
       const userId = this.props.userId
       const response = await fetchCheckpointsHeaders(userId, orderNumber)
       this.setState({
-        orderHeaders: response.header,
+        orderHeader: response.header,
         exception: undefined
       })
     } catch (error) {
@@ -105,40 +95,14 @@ class TrackingStatus extends React.Component {
           </Col>
         </Row>
         {this.state.exception && <Row>
-          <Col md={12} style={{marginTop: '50px'}}>
+          <Col style={{marginTop: '50px'}}>
             <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({exception: undefined})} />
           </Col>
         </Row>}
-        { !this.state.exception && this.state.orderHeaders &&
+        { !this.state.exception && this.state.orderHeader &&
           <Row>
             <Col>
-              <Table size='small' style={{marginTop: '25px'}}>
-                <XL tag={Caption}>
-                  {I18n.t('trackingStatus.orderStatus')}
-                </XL>
-                <Head>
-                  <HeaderRow>
-                    <HeaderCell width='50%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
-                    <HeaderCell width='50%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
-                  </HeaderRow>
-                </Head>
-                <Body>
-                  { this.state.orderHeaders.map((header, index) =>
-                    <a
-                      key={index}
-                      style={{color: 'inherit', textDecoration: 'inherit'}}
-                      target='_blank'
-                      rel='noopener'
-                      href={`https://prtl.parcellab.com/trackings/details?trackingNo=${header.tracking_number}&courier=${header.courier.name}`}
-                    >
-                      <TableRow>
-                        <Cell style={{wordBreak: 'break-all'}} width='50%'>{header.tracking_number}</Cell>
-                        <Cell width='50%'>{header.last_delivery_status.status}</Cell>
-                      </TableRow>
-                    </a>
-                  )}
-                </Body>
-              </Table>
+              <OrderStatus orderHeader={this.state.orderHeader} />
             </Col>
           </Row>}
       </Grid>
