@@ -13,9 +13,9 @@ import {
   Row as TableRow,
   Cell
 } from '@zendeskgarden/react-tables'
-import { Alert, Close, Title } from '@zendeskgarden/react-notifications'
 
 import I18n from '../lib/i18n'
+import ExceptionNotification from './exceptionnotification'
 import {resizeContainer, getValueFromCustomTicketField, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
 
 class TrackingStatus extends React.Component {
@@ -120,11 +120,7 @@ class TrackingStatus extends React.Component {
         }
         {this.state.exception && <Row>
           <Col md={12} style={{marginTop: '50px'}}>
-            <Alert type={this.state.exception.type}>
-              <Title>{I18n.t(`trackingStatus.${this.state.exception.type}.title`)}</Title>
-              {this.state.exception.message}
-              <Close id='root' onClick={() => this.setState({exception: undefined})} aria-label={I18n.t('trackingStatus.exception.close-aria-label')} />
-            </Alert>
+            <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({exception: undefined})} />
           </Col>
         </Row>}
         { !this.state.exception && this.state.orderHeaders &&
