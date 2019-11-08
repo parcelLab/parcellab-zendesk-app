@@ -1,6 +1,4 @@
 import React from 'react'
-import { Button } from '@zendeskgarden/react-buttons'
-import { Field, Label, Hint, Input } from '@zendeskgarden/react-forms'
 import { Grid, Row, Col } from '@zendeskgarden/react-grid'
 import { XL } from '@zendeskgarden/react-typography'
 import {
@@ -16,6 +14,7 @@ import {
 
 import I18n from '../lib/i18n'
 import ExceptionNotification from './exceptionnotification'
+import OrderNumberInputForm from './ordernumberinput'
 import {resizeContainer, getValueFromCustomTicketField, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
 
 class TrackingStatus extends React.Component {
@@ -100,24 +99,11 @@ class TrackingStatus extends React.Component {
   render () {
     return <div>
       <Grid>
-        {this.state.showOrderNumberInput &&
-          <form onSubmit={this.submitForm}>
-            <Row>
-              <Col md={12}>
-                <Field stretched>
-                  <Label>{I18n.t('trackingStatus.orderNumber')}</Label>
-                  <Hint>{I18n.t('trackingStatus.orderNumberHint')}</Hint>
-                  <Input onChange={this.updateOrderNumber} value={this.state.orderNumber} />
-                </Field>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={12}>
-                <Button disabled={this.state.orderNumber.length === 0} stretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
-              </Col>
-            </Row>
-          </form>
-        }
+        <Row>
+          <Col>
+            {this.state.showOrderNumberInput && <OrderNumberInputForm orderNumber={this.state.orderNumber} onOrderNumberChange={this.updateOrderNumber} onSubmit={this.submitForm} />}
+          </Col>
+        </Row>
         {this.state.exception && <Row>
           <Col md={12} style={{marginTop: '50px'}}>
             <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({exception: undefined})} />
