@@ -3,7 +3,7 @@ import { Grid, Row, Col } from '@zendeskgarden/react-grid'
 import { Button } from '@zendeskgarden/react-buttons'
 import { Field, Label, Hint, Input } from '@zendeskgarden/react-forms'
 
-import I18n from '../lib/i18n'
+import I18n from '../../lib/i18n'
 
 const OrderNumberInputForm = ({orderNumber, onOrderNumberChange, onSubmit}) => {
   return <form onSubmit={onSubmit}>

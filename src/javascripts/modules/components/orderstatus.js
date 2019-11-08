@@ -11,7 +11,7 @@ import {
   Cell
 } from '@zendeskgarden/react-tables'
 
-import I18n from '../lib/i18n'
+import I18n from '../../lib/i18n'
 
 const directParcelLabPortalUrl = (trackingNumber, courrierName) => `https://prtl.parcellab.com/trackings/details?trackingNo=${trackingNumber}&courier=${courrierName}`
 

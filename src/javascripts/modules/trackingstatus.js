@@ -3,9 +3,9 @@ import { Grid, Row, Col } from '@zendeskgarden/react-grid'
 
 import I18n from '../lib/i18n'
 import {resizeContainer, getValueFromCustomTicketField, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
-import ExceptionNotification from './exceptionnotification'
-import OrderNumberInputForm from './ordernumberinput'
-import OrderStatus from './orderstatus'
+import ExceptionNotification from './components/exceptionnotification'
+import OrderNumberInputForm from './components/ordernumberinput'
+import OrderStatus from './components/orderstatus'
 
 class TrackingStatus extends React.Component {
   constructor (props) {
