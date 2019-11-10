@@ -52,6 +52,7 @@ describe('TrackingStatus Component', () => {
 
     it('should show tracking number for each parcel if checkpoints has been fetched successfully', async () => {
       const { getByLabelText, queryByText, container } = render(<TrackingStatus />)
+
       await wait(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
@@ -69,6 +70,7 @@ describe('TrackingStatus Component', () => {
 
     it('should provide direct link to parcelLab portal for each fetched tracking number', async () => {
       const { getByLabelText, container } = render(<TrackingStatus />)
+
       await wait(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
@@ -83,6 +85,7 @@ describe('TrackingStatus Component', () => {
 
     it('should have a disabled check button if input field is empty', async () => {
       const { getByLabelText, container } = render(<TrackingStatus />)
+
       await wait(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
@@ -98,6 +101,7 @@ describe('TrackingStatus Component', () => {
     it('should show error message if checkpoints could not be fetched successfully', async () => {
       zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
+
       await wait(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
@@ -113,6 +117,7 @@ describe('TrackingStatus Component', () => {
     it('should close exception message if close button of notification is clicked', async () => {
       zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
       const { getByLabelText, getByText, container, queryByText } = render(<TrackingStatus />)
+
       await wait(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
@@ -136,9 +141,7 @@ describe('TrackingStatus Component', () => {
     it('should automatically fetch order status for each parcel if orderNumberTicketFieldId is provided', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-
       zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
-
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -150,9 +153,7 @@ describe('TrackingStatus Component', () => {
     it('should provide direct link to parcelLab portal for each fetched tracking number', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-
       zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
-
       const { container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -163,10 +164,8 @@ describe('TrackingStatus Component', () => {
     it('should show submission form if automatically fetching of order status based on orderNumberTicketFieldId failed', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-
       zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
       zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
-
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -179,9 +178,7 @@ describe('TrackingStatus Component', () => {
     it('should show submission form if automatically retrieved order number from configured orderNumbterTicketFieldId was empty', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-
       zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve(''))
-
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -195,7 +192,6 @@ describe('TrackingStatus Component', () => {
     it('should show submission form and no error if orderNumberTicketFieldId is not configured (i.e. empty)', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = ''
-
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -209,10 +205,8 @@ describe('TrackingStatus Component', () => {
     it('should show error message if automatically fetching of order status based on orderNumberTicketFieldId failed', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-
       zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
       zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
-
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -223,9 +217,7 @@ describe('TrackingStatus Component', () => {
     it('should show warn message if orderNumberTicketFieldId value retrieval failed', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-
       zafclienthelper.getValueFromCustomTicketField = jest.fn().mockRejectedValue('error')
-
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
