@@ -6,7 +6,7 @@ import { Field, Label, Hint, Input } from '@zendeskgarden/react-forms'
 import I18n from '../../lib/i18n'
 
 const OrderNumberInputForm = ({orderNumber, onOrderNumberChange, onSubmit}) => {
-  return <form onSubmit={onSubmit}>
+  return <form onSubmit={onSubmit} data-testid='form'>
     <Grid>
       <Row>
         <Col md={12}>

@@ -1,6 +1,6 @@
 /* eslint-env jest, browser */
 import React from 'react'
-import { render, fireEvent, wait } from '@testing-library/react'
+import { render, wait } from '@testing-library/react'
 
 import OrderStatus from '../../src/javascripts/modules/components/orderstatus'
 
