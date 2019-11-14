@@ -8,7 +8,7 @@
 
   <body>
     <section data-main class="main" id="root">
-      <img class="loader" src="spinner.gif"/>
+      <img class="loader centered" src="spinner.gif"/>
     </section>
     <% _.forEach(htmlWebpackPlugin.options.vendorJs, function(js) { %><script type="text/javascript" src="<%= js %>"></script><% }); %>
   </body>

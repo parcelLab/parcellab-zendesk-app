@@ -84,6 +84,9 @@ class TrackingStatus extends React.Component {
   }
 
   async submitForm (event) {
+    this.setState({
+      loading: true
+    })
     event.preventDefault()
     this.fetchOrderStatus(this.state.orderNumber)
   }
@@ -93,23 +96,23 @@ class TrackingStatus extends React.Component {
       <Grid>
         <Row>
           <Col>
-            {this.state.showOrderNumberInput && <OrderNumberInputForm orderNumber={this.state.orderNumber} onOrderNumberChange={this.updateOrderNumber} onSubmit={this.submitForm} />}
+            {this.state.showOrderNumberInput && <OrderNumberInputForm disabled={this.state.loading} orderNumber={this.state.orderNumber} onOrderNumberChange={this.updateOrderNumber} onSubmit={this.submitForm} />}
           </Col>
         </Row>
-        { !this.state.exception && this.state.orderHeader &&
+        { !this.state.loading && !this.state.exception && this.state.orderHeader &&
           <Row>
             <Col>
               <OrderStatus orderHeader={this.state.orderHeader} />
             </Col>
           </Row>}
-        {this.state.exception &&
+        {!this.state.loading && this.state.exception &&
           <Row>
             <Col style={{marginTop: '50px'}}>
               <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({exception: undefined})} />
             </Col>
           </Row>}
       </Grid>
-      {this.state.loading && <img className='loader' src='spinner.gif' />}
+      {!this.state.showOrderNumberInput && this.state.loading && <img className='loader centered' src='spinner.gif' />}
     </React.Fragment>
   }
 }

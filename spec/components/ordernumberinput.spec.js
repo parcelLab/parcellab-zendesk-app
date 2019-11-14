@@ -30,4 +30,17 @@ describe('OrderNumberInput Component', () => {
 
     expect(onSubmit).toHaveBeenCalled()
   })
+
+  it('should have disabled button if input field is empty', async () => {
+    const { container } = render(<OrderNumberInput orderNumber={''} onOrderNumberChange={onOrderNumberChange} onSubmit={onSubmit} />)
+
+    expect(container.querySelector('button')).toHaveAttribute('disabled')
+  })
+
+  it('should have disabled button and input field if disabled is true', async () => {
+    const { container, getByLabelText } = render(<OrderNumberInput disabled orderNumber={orderNumber} onOrderNumberChange={onOrderNumberChange} onSubmit={onSubmit} />)
+
+    expect(container.querySelector('button')).toHaveAttribute('disabled')
+    expect(getByLabelText(/order/i)).toHaveAttribute('disabled')
+  })
 })
