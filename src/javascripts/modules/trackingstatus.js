@@ -12,6 +12,7 @@ class TrackingStatus extends React.Component {
     super(props)
 
     this.state = {
+      loading: true,
       showOrderNumberInput: false,
       orderNumber: '',
       orderHeader: undefined,
@@ -25,7 +26,6 @@ class TrackingStatus extends React.Component {
   }
 
   componentDidMount () {
-    resizeContainer()
     this.attemptAutoFetchOrderStatus()
   }
 
@@ -35,6 +35,7 @@ class TrackingStatus extends React.Component {
 
   resetFetchedOrderStatus (exception) {
     this.setState({
+      loading: false,
       showOrderNumberInput: true,
       orderHeader: undefined,
       exception: exception
@@ -70,6 +71,7 @@ class TrackingStatus extends React.Component {
       const userId = this.props.userId
       const response = await fetchCheckpointsHeaders(userId, orderNumber)
       this.setState({
+        loading: false,
         orderHeader: response.header,
         exception: undefined
       })
@@ -87,26 +89,28 @@ class TrackingStatus extends React.Component {
   }
 
   render () {
-    return <div>
+    return <React.Fragment>
       <Grid>
         <Row>
           <Col>
             {this.state.showOrderNumberInput && <OrderNumberInputForm orderNumber={this.state.orderNumber} onOrderNumberChange={this.updateOrderNumber} onSubmit={this.submitForm} />}
           </Col>
         </Row>
-        {this.state.exception && <Row>
-          <Col style={{marginTop: '50px'}}>
-            <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({exception: undefined})} />
-          </Col>
-        </Row>}
         { !this.state.exception && this.state.orderHeader &&
           <Row>
             <Col>
               <OrderStatus orderHeader={this.state.orderHeader} />
             </Col>
           </Row>}
+        {this.state.exception &&
+          <Row>
+            <Col style={{marginTop: '50px'}}>
+              <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({exception: undefined})} />
+            </Col>
+          </Row>}
       </Grid>
-    </div>
+      {this.state.loading && <img className='loader' src='spinner.gif' />}
+    </React.Fragment>
   }
 }
 
