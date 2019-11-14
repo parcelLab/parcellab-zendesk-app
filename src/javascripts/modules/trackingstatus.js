@@ -36,7 +36,7 @@ class TrackingStatus extends React.Component {
   resetFetchedOrderStatus (exception) {
     this.setState({
       showOrderNumberInput: true,
-      orderHeader: [],
+      orderHeader: undefined,
       exception: exception
     })
   }
