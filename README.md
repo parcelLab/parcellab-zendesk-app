@@ -27,11 +27,21 @@ It's also worthwhile to check out the following resources, so you get an idea ho
 ## How To Run This App Locally
 
 1. `npm install`
-1. `npm run watch` - compiles and watches files with webpack
-1. Open a new command line window in the root app directory
+1. `npm run dev` - compiles and watches files with webpack and serves the app to your Zendesk instance with `?zat=true`
 1. Edit `./settings.yml` to change the Zendesk app's test configuration settings. By default it is using the 'parcelFashion' userId and the ticket field ID for the 'order number' ticket field of the 'd3v-parcellab' Zendesk support board.
-1. `zat server -p dist` - Serves the app to your Zendesk instance with `?zat=true`
 1. Open up a browser, navigate to a ticket in Zendesk, ensure you have the above query parameter set in your browser's address bar. You should then see your app being served and any local changes will be automatically deployed. In most browsers you will need to explicitly allow loading unsafe scripts or mixed content (warning on the right side of the address bar), due to the way the integration with your local Zendesk app works.
+
+## How To Run This App With Our Zendesk Test Account
+
+We've been provided with a so called "sponsored" Zendesk account, which gives us the ability to test our Zendesk app in an actual Zendesk board, without the need for us to submit the app to the Zendesk marketplace.
+To run the app within our Zendesk board do the following:
+
+1. Within the project root folder, run `npm run dev`
+1. Open up our Zendesk support board: [d3v-parcellab.zendesk.com](https://d3v-parcellab.zendesk.com) and logon with the login details stored in the "Shared-Dev" folder in LastPass.
+1. Navigate to a support ticket and open it.
+1. Edit the URL in the address bar and the query parameter `?zat=true`. This will tell Zendesk to serve any Zendesk apps coming from your local webserver that you started with `npm run dev`.
+1. Allow loading unsafe scripts or mixed content (warning on the right side of your browser's address bar). This is necessary as the Zendesk app is trying to load scripts from your localhost via an unsafe HTTP connection.
+1. You'll now be able to see your app running in the right sidebar of any ticket you're opening. Any code changes that you save locally will be hotloaded and can be accessed by reloading the sidebar apps or refreshing the page.
 
 ## How To Run The Tests
 
