@@ -8,7 +8,7 @@ import I18n from '../../lib/i18n'
 
 const OrderNumberInputForm = ({orderNumber, onOrderNumberChange, onSubmit, disabled = false}) => {
   return <form onSubmit={onSubmit} data-testid='form'>
-    <Grid>
+    <Grid style={{marginBottom: '25px'}}>
       <Row>
         <Col md={12}>
           <Field stretched>

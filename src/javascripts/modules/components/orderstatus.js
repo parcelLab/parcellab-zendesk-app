@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { XL } from '@zendeskgarden/react-typography'
 import {
   Table,
-  Caption,
   Head,
   HeaderRow,
   HeaderCell,
@@ -17,10 +15,7 @@ import I18n from '../../lib/i18n'
 const directParcelLabPortalUrl = (trackingNumber, courrierName) => `https://prtl.parcellab.com/trackings/details?trackingNo=${trackingNumber}&courier=${courrierName}`
 
 const OrderStatus = ({orderHeader}) => {
-  return <Table size='small' style={{marginTop: '25px'}}>
-    <XL tag={Caption}>
-      {I18n.t('trackingStatus.orderStatus')}
-    </XL>
+  return <Table size='small'>
     <Head>
       <HeaderRow>
         <HeaderCell width='50%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
