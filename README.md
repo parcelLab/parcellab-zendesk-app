@@ -1,15 +1,18 @@
 # parcellab-zendesk-app
 
 A Zendesk ticket sidebar app to check order status via parcelLab API.
-Project structure is based on [zendesk/app_scaffold](https://github.com/zendesk/app_scaffold)
+Project structure is based on [zendesk/app_scaffold](https://github.com/zendesk/app_scaffold).
+This app is written in JavaScript and React.
+
+![Zendesk App in Action](./src/images/screenshot-0.png "Zendesk App in Action")
 
 ## Support
 
-If you have any specifc questions, please feel free to contact Andre (hmmmsausages / andre@parcellab.com)
+If you have any specifc questions, please feel free to contact Andre ([hmmmsausages](https://github.com/hmmmsausages) / [andre@parcellab.com](mailto:andre@parcellab.com))
 
 ## Prerequisite
 
-To successfully test the integration of this Zendesk with a live Zendesk portal and package the Zendesk app for a production release, you will need the Zendesk app tools (`zat`), which is a CLI Ruby app.
+To successfully test the integration of this Zendesk app with a live Zendesk portal and package the Zendesk app for a production release, you will need the Zendesk app tools (`zat`), which is a CLI Ruby tool.
 
 If you're on macOS you should already have Ruby installed by default, so all you need to do in that case is:
 
@@ -26,10 +29,18 @@ It's also worthwhile to check out the following resources, so you get an idea ho
 
 ## How To Run This App Locally
 
-1. `npm install`
-1. `npm run dev` - compiles and watches files with webpack and serves the app to your Zendesk instance with `?zat=true`
-1. Edit `./settings.yml` to change the Zendesk app's test configuration settings. By default it is using the 'parcelFashion' userId and the ticket field ID for the 'order number' ticket field of the 'd3v-parcellab' Zendesk support board.
-1. Open up a browser, navigate to a ticket in Zendesk, ensure you have the above query parameter set in your browser's address bar. You should then see your app being served and any local changes will be automatically deployed. In most browsers you will need to explicitly allow loading unsafe scripts or mixed content (warning on the right side of the address bar), due to the way the integration with your local Zendesk app works.
+To run the app locally executed the following steps:
+
+```bash
+# Install all node dependencies (in case it hasn't been done before)
+npm install
+# Compile and watch files with webpack and serve the app to your Zendesk instance with `?zat=true`
+npm run dev
+```
+
+Edit `./settings.yml` to change the Zendesk app's test configuration settings. By default it is using the 'parcelFashion' userId and the ticket field ID for the 'order number' ticket field of the 'd3v-parcellab' Zendesk support board.
+
+Then you can open up a browser, navigate to a ticket in Zendesk, ensure you have the above query parameter set in your browser's address bar. You should then see your app being served and any local changes will be automatically deployed. In most browsers you will need to explicitly allow loading unsafe scripts or mixed content (warning on the right side of the address bar), due to the way the integration with your local Zendesk app works.
 
 ## How To Run This App With Our Zendesk Test Account
 
@@ -45,19 +56,36 @@ To run the app within our Zendesk board do the following:
 
 ## How To Run The Tests
 
-1. `npm install`
-1. `npm test`
+The app is using the [Jest testing framework](https://jestjs.io/), combined with the [testing-library / react-testing-library](https://testing-library.com/) extension.
+To run the all tests, do the following:
+
+```bash
+# Install all node dependencies (in case it hasn't been done before)
+npm install
+# Execute all tests
+npm test
+```
 
 ## Compile The App For Production
 
-1. `npm install`
-1. `npm run build`
-1. `zat validate -p dist` - Validates the app against Zendesk's quality profile. If no errors or warnings are shown, the app should be runnable.
-1. `zat package -p dist` - This will package the app into a zip file and place it in `./dist/tmp/*`. The zip file can then be used to release the app in the Zendesk marketplace.
+The app needs to be build and packaged before it can be released on the Zendesk marketplace via the [Zendesk Developers portal](https://apps.zendesk.com/).
+To build, validate and package the app do the following.
+**Note**: Ensure your test are all passing before you package the app for a release.
+
+```bash
+# Install all node dependencies (in case it hasn't been done before)
+npm install
+# Create production build in folder ./dist
+npm run build
+# Validate the app against Zendesk's quality profile. If no errors or warnings are shown, the app should be releasable.
+zat validate -p dist
+# Package the app into a zip file and place it in `./dist/tmp/*`. The zip file can then be used to release the app in the Zendesk marketplace.
+zat package -p dist
+```
 
 ## General App Structure
 
-*Note:* Zendesk enforces the mandatory existence of some files and their folder structure. This is mainly for I18N and Zendesk marketplace documentation purposes: Please see [developer.zendesk.com/apps/docs/developer-guide/setup#file-requirements](https://developer.zendesk.com/apps/docs/developer-guide/setup#file-requirements) for more information
+**Note:** Zendesk enforces the mandatory existence of some files and their folder structure. This is mainly for I18N and Zendesk marketplace documentation purposes: Please see [developer.zendesk.com/apps/docs/developer-guide/setup#file-requirements](https://developer.zendesk.com/apps/docs/developer-guide/setup#file-requirements) for more information
 
 - src: contains all Zendesk app Javascript & React source code
   - image: contains all images. *Note:* that some images are mandatory and required by Zendesk even though they're are not actively used in the source code
