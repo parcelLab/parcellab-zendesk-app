@@ -98,8 +98,8 @@ describe('TrackingStatus Component', () => {
       })
     })
 
-    it('should show error message if checkpoints could not be fetched successfully', async () => {
-      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
+    it('should show bad request error message if checkpoints could not be found due to a 4xx response code', async () => {
+      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue({status: 400})
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
       await wait(() => {
@@ -111,6 +111,22 @@ describe('TrackingStatus Component', () => {
 
       await wait(() => {
         expect(getByText(/could not be found/i)).toBeInTheDocument()
+      })
+    })
+
+    it('should show server error message if checkpoints could not be fetched due to a 5xx response code', async () => {
+      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue({status: 500})
+      const { getByLabelText, getByText, container } = render(<TrackingStatus />)
+
+      await wait(() => {
+        expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
+      })
+
+      fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+      fireEvent.click(container.querySelector('Button[type=submit]'))
+
+      await wait(() => {
+        expect(getByText(/response code: 500/i)).toBeInTheDocument()
       })
     })
 

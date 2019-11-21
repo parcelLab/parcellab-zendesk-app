@@ -24,7 +24,8 @@
   "trackingStatus.orderStatus": "Order status",
   "trackingStatus.error.title": "Error",
   "trackingStatus.warning.title": "Warning",
-  "trackingStatus.error.fetch.message": "Order number status could not be found. Please verify that the provided order number is valid.",
+  "trackingStatus.error.fetch.badRequest": "Order number status could not be found. Please verify that the provided order number is valid.",
+  "trackingStatus.error.fetch.serverError": "Encountered problems connecting to the parcelLab API. Please try again later. Response code: {{statusCode}}",
   "trackingStatus.warning.invalidOrderNumberTicketFieldId.message": "Could not automatically retrieve order number from Zendesk ticket. Please ensure that the configured order number ticket field ID is valid.",
   "trackingStatus.exception.close-aria-label": "Close Notification"
 }

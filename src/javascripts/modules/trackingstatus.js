@@ -51,7 +51,7 @@ class TrackingStatus extends React.Component {
         } else {
           this.resetFetchedOrderStatus()
         }
-      } catch (e) {
+      } catch (error) {
         this.resetFetchedOrderStatus({
           type: 'warning',
           message: I18n.t('trackingStatus.warning.invalidOrderNumberTicketFieldId.message')
@@ -78,7 +78,7 @@ class TrackingStatus extends React.Component {
     } catch (error) {
       this.resetFetchedOrderStatus({
         type: 'error',
-        message: I18n.t('trackingStatus.error.fetch.message')
+        message: error.status >= 500 ? I18n.t('trackingStatus.error.fetch.serverError', {statusCode: error.status}) : I18n.t('trackingStatus.error.fetch.badRequest')
       })
     }
   }
