@@ -3,6 +3,7 @@ import App from '../src/javascripts/modules/app'
 jest.mock('../src/javascripts/lib/zendeskclient', () => {
   return {
     resizeContainer: jest.fn(),
+    setStripLeadingZerosFromOrderNumber: jest.fn(),
     getAppSettings: jest.fn().mockReturnValue(Promise.resolve({
       userId: '123',
       orderNumberTickeFieldId: ''

@@ -40,12 +40,30 @@ describe('ZendeskClient', () => {
   })
 
   describe('fetchCheckpointsHeaders', () => {
-    it('calls zafClient.request with correct parameter', () => {
+    it('calls zafClient.request and does not strip of zeros of orderNumber if setting is inactive', () => {
       const userId = 'userId'
-      const orderNumber = 'orderNumber'
+      const orderNumber = '000123'
+
+      ZendeskClient.setStripLeadingZerosFromOrderNumber(false)
       ZendeskClient.fetchCheckpointsHeaders(userId, orderNumber)
+
       expect(global.InitializedZAFClient.request).toHaveBeenCalledWith({
         url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${orderNumber}`,
+        type: 'GET',
+        cors: true
+      })
+    })
+
+    it('calls zafClient.request and strips of zeros of orderNumber if setting is active', () => {
+      const userId = 'userId'
+      const orderNumber = '000123'
+      const strippedOrderNumber = '123'
+
+      ZendeskClient.setStripLeadingZerosFromOrderNumber(true)
+      ZendeskClient.fetchCheckpointsHeaders(userId, orderNumber)
+
+      expect(global.InitializedZAFClient.request).toHaveBeenCalledWith({
+        url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${strippedOrderNumber}`,
         type: 'GET',
         cors: true
       })

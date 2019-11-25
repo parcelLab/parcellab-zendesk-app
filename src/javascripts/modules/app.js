@@ -9,7 +9,8 @@ import ZendeskClient from '../lib/zendeskclient'
 
 const App = async appData => {
   const {locale} = await ZendeskClient.getCurrentUserDetails()
-  const {userId, orderNumberTicketFieldId} = await ZendeskClient.getAppSettings()
+  const {userId, orderNumberTicketFieldId, stripLeadingZerosFromOrderNumber} = await ZendeskClient.getAppSettings()
+  ZendeskClient.setStripLeadingZerosFromOrderNumber(stripLeadingZerosFromOrderNumber)
 
   I18n.loadTranslations(locale)
   ReactDOM.render(

@@ -2,8 +2,8 @@
 const zafClient = ZAFClient.init()
 
 class ZendeskClient {
-  constructor (stripLeadingZeros = false) {
-    this.stripLeadingZeros = stripLeadingZeros
+  constructor (stripLeadingZerosFromOrderNumber = false) {
+    this.stripLeadingZerosFromOrderNumber = stripLeadingZerosFromOrderNumber
   }
 
   resizeContainer (max = Number.POSITIVE_INFINITY) {
@@ -12,8 +12,9 @@ class ZendeskClient {
   }
 
   fetchCheckpointsHeaders (userId, orderNumber) {
+    const preprocessedOrderNumber = this.stripLeadingZerosFromOrderNumber ? orderNumber.replace(/^0*/, '') : orderNumber
     const request = {
-      url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${orderNumber}`,
+      url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${preprocessedOrderNumber}`,
       type: 'GET',
       cors: true
     }
@@ -22,6 +23,10 @@ class ZendeskClient {
 
   onAppRegistered (callback) {
     zafClient.on('app.registered', callback)
+  }
+
+  setStripLeadingZerosFromOrderNumber (stripLeadingZerosFromOrderNumber) {
+    this.stripLeadingZerosFromOrderNumber = stripLeadingZerosFromOrderNumber
   }
 
   async getCurrentUserDetails () {
