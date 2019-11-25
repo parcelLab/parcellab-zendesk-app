@@ -1,26 +1,23 @@
-name: parcelLab Zendesk App CI
+name: Build & Test
 
 on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [10.x]
-
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout repository
+      uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        npm ci
-        npm run build
-        npm test
-      env:
-        CI: true
+    - name: Install NPM dependencies
+      run: npm ci
+    - name: Build parcellab-zendesk-app
+      run: npm run build
+    - name: Run Jest tests
+      run: npm test

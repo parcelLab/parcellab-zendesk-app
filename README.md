@@ -1,5 +1,7 @@
 # parcellab-zendesk-app
 
+[![](https://github.com/parcelLab/parcellab-zendesk-app/workflows/Build%20&%20Test/badge.svg)](https://github.com/parcelLab/parcellab-zendesk-app/actions)
+
 A Zendesk ticket sidebar app to check order status via parcelLab API.
 Project structure is based on [zendesk/app_scaffold](https://github.com/zendesk/app_scaffold).
 This app is written in JavaScript and React.
