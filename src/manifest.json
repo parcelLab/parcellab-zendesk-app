@@ -22,6 +22,12 @@
     "type": "text",
     "secure": false,
     "required": false
+  }, {
+    "name": "stripLeadingZerosFromOrderNumber",
+    "type": "checkbox",
+    "secure": false,
+    "required": false,
+    "default": false
   }],
   "version": "1.0.0-beta.2",
   "frameworkVersion": "2.0"

@@ -5,3 +5,5 @@
 userId: 1612197
 # ticket field ID of 'order number' ticket field of d3v-parcellab Zendesk support board
 orderNumberTicketFieldId: 360003921997
+# define if the app should strip leading zeros from order numbers (requirement of MOO)
+stripLeadingZerosFromOrderNumber: true

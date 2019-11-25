@@ -1,6 +1,6 @@
 /* eslint-env jest, browser */
 import App from '../src/javascripts/modules/app'
-jest.mock('../src/javascripts/lib/zafclienthelper', () => {
+jest.mock('../src/javascripts/lib/zendeskclient', () => {
   return {
     resizeContainer: jest.fn(),
     getAppSettings: jest.fn().mockReturnValue(Promise.resolve({

@@ -5,11 +5,11 @@ import { ThemeProvider } from '@zendeskgarden/react-theming'
 
 import TrackingStatus from './trackingstatus'
 import I18n from '../../javascripts/lib/i18n'
-import {getCurrentUserDetails, getAppSettings} from '../lib/zafclienthelper'
+import ZendeskClient from '../lib/zendeskclient'
 
 const App = async appData => {
-  const {locale} = await getCurrentUserDetails()
-  const {userId, orderNumberTicketFieldId} = await getAppSettings()
+  const {locale} = await ZendeskClient.getCurrentUserDetails()
+  const {userId, orderNumberTicketFieldId} = await ZendeskClient.getAppSettings()
 
   I18n.loadTranslations(locale)
   ReactDOM.render(

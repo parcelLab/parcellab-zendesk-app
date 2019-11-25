@@ -13,6 +13,10 @@
       "orderNumberTicketFieldId": {
         "label": "(optional) Zendesk Ticket Field ID for automatic order number retrieval",
         "helpText": "This is the Zendesk ticket field ID that should correspond to the order number ticket field ID of your Zendesk support tickets. This identifier that can be found in the Zendesk admin overview under the 'manage / ticket fields' section. If you specify this ticket field ID, then the parcelLab Zendesk app will attempt to automatically retrieve the order number from the Zendesk ticket and fetch the corresponding order status from parcelLab. Leave this field empty, if you would like instead to be prompted to manually enter the order number."
+      },
+      "stripLeadingZerosFromOrderNumber": {
+        "label": "(optional) Strip leading 0s from order number",
+        "helpText": "Define if leading 0s should be stripped from the provided order number before it's being send to the parcelLab API (e.g. 123 instead of 000123)"
       }
     }
   },

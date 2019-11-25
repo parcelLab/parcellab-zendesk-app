@@ -1,17 +1,10 @@
 /* eslint-env jest */
-import {
-  resizeContainer,
-  getCurrentUserDetails,
-  getAppSettings,
-  getValueFromCustomTicketField,
-  onAppRegistered,
-  fetchCheckpointsHeaders
-} from '../src/javascripts/lib/zafclienthelper'
+import ZendeskClient from '../src/javascripts/lib/zendeskclient'
 
-describe('ZAFClientHelper', () => {
+describe('ZendeskClient', () => {
   describe('resizeContainer', () => {
     it('calls zafClient.invoke with correct parameters', () => {
-      resizeContainer()
+      ZendeskClient.resizeContainer()
       expect(global.InitializedZAFClient.invoke).toHaveBeenCalledWith('resize', {height: 0})
     })
   })
@@ -22,7 +15,7 @@ describe('ZAFClientHelper', () => {
       global.InitializedZAFClient.get = jest.fn().mockReturnValue(Promise.resolve({
         currentUser: expectedValue
       }))
-      await expect(getCurrentUserDetails()).resolves.toBe('expectedValue')
+      await expect(ZendeskClient.getCurrentUserDetails()).resolves.toBe('expectedValue')
       expect(global.InitializedZAFClient.get).toHaveBeenCalledWith('currentUser')
     })
   })
@@ -33,7 +26,7 @@ describe('ZAFClientHelper', () => {
       global.InitializedZAFClient.metadata = jest.fn().mockReturnValue(Promise.resolve({
         settings: expectedValue
       }))
-      await expect(getAppSettings()).resolves.toBe('expectedValue')
+      await expect(ZendeskClient.getAppSettings()).resolves.toBe('expectedValue')
       expect(global.InitializedZAFClient.metadata).toHaveBeenCalled()
     })
   })
@@ -41,7 +34,7 @@ describe('ZAFClientHelper', () => {
   describe('onAppRegistered', () => {
     it('calls zafClient.get with correct parameter', () => {
       const param = 'param'
-      onAppRegistered(param)
+      ZendeskClient.onAppRegistered(param)
       expect(global.InitializedZAFClient.on).toHaveBeenCalledWith('app.registered', param)
     })
   })
@@ -50,7 +43,7 @@ describe('ZAFClientHelper', () => {
     it('calls zafClient.request with correct parameter', () => {
       const userId = 'userId'
       const orderNumber = 'orderNumber'
-      fetchCheckpointsHeaders(userId, orderNumber)
+      ZendeskClient.fetchCheckpointsHeaders(userId, orderNumber)
       expect(global.InitializedZAFClient.request).toHaveBeenCalledWith({
         url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${orderNumber}`,
         type: 'GET',
@@ -68,7 +61,7 @@ describe('ZAFClientHelper', () => {
         [customTicketFieldFullName]: ticketValue
       }))
 
-      const actualValue = await getValueFromCustomTicketField(customTicketFieldId)
+      const actualValue = await ZendeskClient.getValueFromCustomTicketField(customTicketFieldId)
 
       expect(global.InitializedZAFClient.get)
         .toHaveBeenCalledWith(customTicketFieldFullName)
@@ -80,7 +73,7 @@ describe('ZAFClientHelper', () => {
       const customTicketFieldFullName = `ticket.customField:custom_field_${customTicketFieldId}`
       global.InitializedZAFClient.get = jest.fn().mockReturnValue(Promise.resolve({}))
 
-      await expect(getValueFromCustomTicketField(customTicketFieldId)).rejects.toThrowError()
+      await expect(ZendeskClient.getValueFromCustomTicketField(customTicketFieldId)).rejects.toThrowError()
 
       expect(global.InitializedZAFClient.get)
         .toHaveBeenCalledWith(customTicketFieldFullName)

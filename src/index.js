@@ -1,4 +1,4 @@
 import App from './javascripts/modules/app'
-import {onAppRegistered} from './javascripts/lib/zafclienthelper'
+import ZendeskClient from './javascripts/lib/zendeskclient'
 
-onAppRegistered(appData => new App(appData))
+ZendeskClient.onAppRegistered(appData => new App(appData))

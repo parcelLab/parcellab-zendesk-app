@@ -3,14 +3,14 @@ import React from 'react'
 import { render, fireEvent, wait } from '@testing-library/react'
 
 import TrackingStatus from '../src/javascripts/modules/trackingstatus'
-import * as zafclienthelper from '../src/javascripts/lib/zafclienthelper'
-jest.mock('../src/javascripts/lib/zafclienthelper.js')
+import ZendeskClient from '../src/javascripts/lib/zendeskclient'
+jest.mock('../src/javascripts/lib/zendeskclient.js')
 
 describe('TrackingStatus Component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    zafclienthelper.resizeContainer = jest.fn()
-    zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockReturnValue(Promise.resolve(
+    ZendeskClient.resizeContainer = jest.fn()
+    ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockReturnValue(Promise.resolve(
       {
         header: [{
           courier: {
@@ -99,7 +99,7 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should show bad request error message if checkpoints could not be found due to a 4xx response code', async () => {
-      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue({status: 400})
+      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue({status: 400})
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
       await wait(() => {
@@ -115,7 +115,7 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should show server error message if checkpoints could not be fetched due to a 5xx response code', async () => {
-      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue({status: 500})
+      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue({status: 500})
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
       await wait(() => {
@@ -131,7 +131,7 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should close exception message if close button of notification is clicked', async () => {
-      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
+      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
       const { getByLabelText, getByText, container, queryByText } = render(<TrackingStatus />)
 
       await wait(() => {
@@ -157,7 +157,7 @@ describe('TrackingStatus Component', () => {
     it('should automatically fetch order status for each parcel if orderNumberTicketFieldId is provided', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-      zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
+      ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -169,7 +169,7 @@ describe('TrackingStatus Component', () => {
     it('should provide direct link to parcelLab portal for each fetched tracking number', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-      zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
+      ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
       const { container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -180,8 +180,8 @@ describe('TrackingStatus Component', () => {
     it('should show submission form if automatically fetching of order status based on orderNumberTicketFieldId failed', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-      zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
-      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
+      ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
+      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -194,7 +194,7 @@ describe('TrackingStatus Component', () => {
     it('should show submission form if automatically retrieved order number from configured orderNumbterTicketFieldId was empty', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-      zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve(''))
+      ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve(''))
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -221,8 +221,8 @@ describe('TrackingStatus Component', () => {
     it('should show error message if automatically fetching of order status based on orderNumberTicketFieldId failed', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-      zafclienthelper.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
-      zafclienthelper.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
+      ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
+      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -233,7 +233,7 @@ describe('TrackingStatus Component', () => {
     it('should show warn message if orderNumberTicketFieldId value retrieval failed', async () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
-      zafclienthelper.getValueFromCustomTicketField = jest.fn().mockRejectedValue('error')
+      ZendeskClient.getValueFromCustomTicketField = jest.fn().mockRejectedValue('error')
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {

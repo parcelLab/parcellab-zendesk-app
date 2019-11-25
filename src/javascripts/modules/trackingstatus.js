@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, Row, Col } from '@zendeskgarden/react-grid'
 
 import I18n from '../lib/i18n'
-import {resizeContainer, getValueFromCustomTicketField, fetchCheckpointsHeaders} from '../lib/zafclienthelper'
+import ZendeskClient from '../lib/zendeskclient'
 import ExceptionNotification from './components/exceptionnotification'
 import OrderNumberInputForm from './components/ordernumberinput'
 import OrderStatus from './components/orderstatus'
@@ -30,7 +30,7 @@ class TrackingStatus extends React.Component {
   }
 
   componentDidUpdate () {
-    resizeContainer()
+    ZendeskClient.resizeContainer()
   }
 
   resetFetchedOrderStatus (exception) {
@@ -45,7 +45,7 @@ class TrackingStatus extends React.Component {
   async attemptAutoFetchOrderStatus () {
     if (this.props.orderNumberTicketFieldId) {
       try {
-        const orderNumber = await getValueFromCustomTicketField(this.props.orderNumberTicketFieldId)
+        const orderNumber = await ZendeskClient.getValueFromCustomTicketField(this.props.orderNumberTicketFieldId)
         if (orderNumber) {
           this.fetchOrderStatus(orderNumber)
         } else {
@@ -69,7 +69,7 @@ class TrackingStatus extends React.Component {
   async fetchOrderStatus (orderNumber) {
     try {
       const userId = this.props.userId
-      const response = await fetchCheckpointsHeaders(userId, orderNumber)
+      const response = await ZendeskClient.fetchCheckpointsHeaders(userId, orderNumber)
       this.setState({
         loading: false,
         orderHeader: response.header,
