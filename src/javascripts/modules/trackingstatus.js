@@ -105,12 +105,10 @@ class TrackingStatus extends React.Component {
   }
 
   getMostRecentTimestampForTrackingNumber (body, checkpointId) {
-    if (body && checkpointId) {
-      const bodyEntriesOfCheckpoint = body[checkpointId]
-      const mostRecentTimestamp = new Date(Math.max.apply(null, bodyEntriesOfCheckpoint
-        .map(bodyEntry => new Date(bodyEntry.timestamp))))
-      return mostRecentTimestamp
-    }
+    const bodyEntriesOfCheckpoint = body[checkpointId]
+    const mostRecentTimestamp = new Date(Math.max.apply(null, bodyEntriesOfCheckpoint
+      .map(bodyEntry => new Date(bodyEntry.timestamp))))
+    return mostRecentTimestamp
   }
 
   async submitForm (event) {
