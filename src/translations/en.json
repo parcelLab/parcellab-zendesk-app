@@ -20,6 +20,7 @@
       }
     }
   },
+  "trackingStatus.lastupdated": "Last updated on",
   "trackingStatus.orderNumber": "Order #",
   "trackingStatus.orderNumberHint": "Enter the order number you would like to check",
   "trackingStatus.checkButton": "Check",

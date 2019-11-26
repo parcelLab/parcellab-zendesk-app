@@ -38,6 +38,7 @@ describe('ParcelLab App Module Integration', () => {
 
     global.InitializedZAFClient.request = jest.fn().mockReturnValue(Promise.resolve({
       header: [{
+        id: 'tracking1',
         tracking_number: 'sampleTrackingNumber',
         courier: {
           name: 'sampleCourierName'
@@ -45,7 +46,14 @@ describe('ParcelLab App Module Integration', () => {
         last_delivery_status: {
           status: 'deliveryStatus'
         }
-      }]
+      }],
+      body: {
+        'tracking1': [{
+          timestamp: '2018-04-01T00:00:00.000Z'
+        }, {
+          timestamp: '2018-04-04T18:14:59.000Z'
+        }]
+      }
     }))
 
     document.body.innerHTML = '<section data-main id="root"><img class="loader" src="spinner.gif"/></section>'
@@ -79,6 +87,7 @@ describe('ParcelLab App Module Integration', () => {
 
     global.InitializedZAFClient.request = jest.fn().mockReturnValue(Promise.resolve({
       header: [{
+        id: 'tracking1',
         tracking_number: 'sampleTrackingNumber',
         courier: {
           name: 'sampleCourierName'
@@ -86,7 +95,14 @@ describe('ParcelLab App Module Integration', () => {
         last_delivery_status: {
           status: 'deliveryStatus'
         }
-      }]
+      }],
+      body: {
+        'tracking1': [{
+          timestamp: '2018-04-01T00:00:00.000Z'
+        }, {
+          timestamp: '2018-04-04T18:14:59.000Z'
+        }]
+      }
     }))
 
     document.body.innerHTML = '<section data-main id="root"><img class="loader" src="spinner.gif"/></section>'

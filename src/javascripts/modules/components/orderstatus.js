@@ -6,15 +6,18 @@ import {
   HeaderRow,
   HeaderCell,
   Body,
-  Row as TableRow,
+  GroupRow,
+  Row,
   Cell
 } from '@zendeskgarden/react-tables'
 
 import I18n from '../../lib/i18n'
 
-const directParcelLabPortalUrl = (trackingNumber, courrierName) => `https://prtl.parcellab.com/trackings/details?trackingNo=${trackingNumber}&courier=${courrierName}`
+const directParcelLabPortalUrl = (trackingNumber, courierName) => `https://prtl.parcellab.com/trackings/details?trackingNo=${trackingNumber}&courier=${courierName}`
 
-const OrderStatus = ({orderHeader}) => {
+const toDateString = date => date.toLocaleDateString()
+
+const OrderStatus = ({orderStatus}) => {
   return <Table size='small'>
     <Head>
       <HeaderRow>
@@ -23,34 +26,41 @@ const OrderStatus = ({orderHeader}) => {
       </HeaderRow>
     </Head>
     <Body>
-      { orderHeader.map((header, index) =>
-        <a
-          key={index}
-          style={{color: 'inherit', textDecoration: 'inherit'}}
-          target='_blank'
-          rel='noopener'
-          href={directParcelLabPortalUrl(header.tracking_number, header.courier.name)}
-        >
-          <TableRow>
-            <Cell style={{wordBreak: 'break-all'}} width='50%'>{header.tracking_number}</Cell>
-            <Cell width='50%'>{header.last_delivery_status.status}</Cell>
-          </TableRow>
-        </a>
+      { orderStatus.map((orderStatusEntry, index) =>
+        <React.Fragment key={index}>
+          <a
+            style={{color: 'inherit', textDecoration: 'inherit'}}
+            target='_blank'
+            rel='noopener'
+            href={directParcelLabPortalUrl(orderStatusEntry.trackingNumber, orderStatusEntry.courierName)}
+          >
+            <Row>
+              <Cell style={{wordBreak: 'break-all'}} width='50%'>{orderStatusEntry.trackingNumber}</Cell>
+              <Cell width='50%'>{orderStatusEntry.status.message}</Cell>
+            </Row>
+          </a>
+          <GroupRow>
+            <Cell width='100%'>
+              {I18n.t('trackingStatus.lastupdated')}: <strong style={{ marginLeft: '5px' }}>{toDateString(orderStatusEntry.status.timestamp)}</strong>
+            </Cell>
+          </GroupRow>
+        </React.Fragment>
       )}
     </Body>
   </Table>
 }
 
 OrderStatus.propTypes = {
-  orderheader: PropTypes.arrayOf({
-    tracking_number: PropTypes.string.isRequired,
-    courier: PropTypes.shape({
-      name: PropTypes.string.isRequired
-    }).isRequired,
-    last_delivery_status: PropTypes.shape({
-      status: PropTypes.string.isRequired
-    }).isRequired
-  })
+  orderStatus: PropTypes.arrayOf(
+    PropTypes.shape({
+      trackingNumber: PropTypes.string.isRequired,
+      courierName: PropTypes.string.isRequired,
+      status: PropTypes.shape({
+        message: PropTypes.string.isRequired,
+        timestamp: PropTypes.instanceOf(Date).isRequired
+      }).isRequired
+    })
+  ).isRequired
 }
 
 export default OrderStatus

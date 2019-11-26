@@ -11,7 +11,7 @@ class ZendeskClient {
     return zafClient.invoke('resize', { height: newHeight })
   }
 
-  fetchCheckpointsHeaders (userId, orderNumber) {
+  fetchCheckpoints (userId, orderNumber) {
     const preprocessedOrderNumber = this.stripLeadingZerosFromOrderNumber ? orderNumber.replace(/^0*/, '') : orderNumber
     const request = {
       url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${preprocessedOrderNumber}`,

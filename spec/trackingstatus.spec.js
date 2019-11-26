@@ -10,9 +10,10 @@ describe('TrackingStatus Component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     ZendeskClient.resizeContainer = jest.fn()
-    ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockReturnValue(Promise.resolve(
+    ZendeskClient.fetchCheckpoints = jest.fn().mockReturnValue(Promise.resolve(
       {
         header: [{
+          id: 'tracking1',
           courier: {
             name: 'dhl'
           },
@@ -21,6 +22,7 @@ describe('TrackingStatus Component', () => {
             status: 'Delivery is being prepared'
           }
         }, {
+          id: 'tracking2',
           courier: {
             name: 'dhl'
           },
@@ -28,7 +30,19 @@ describe('TrackingStatus Component', () => {
           last_delivery_status: {
             status: 'Ready for Collection'
           }
-        }]
+        }],
+        body: {
+          'tracking1': [{
+            timestamp: '2018-04-01T00:00:00.000Z'
+          }, {
+            timestamp: '2018-04-04T18:14:59.000Z'
+          }],
+          'tracking2': [{
+            timestamp: '2018-04-12T00:00:00.000Z'
+          }, {
+            timestamp: '2018-06-006T18:14:59.000Z'
+          }]
+        }
       }
     ))
   })
@@ -99,7 +113,7 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should show bad request error message if checkpoints could not be found due to a 4xx response code', async () => {
-      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue({status: 400})
+      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue({status: 400})
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
       await wait(() => {
@@ -115,7 +129,7 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should show server error message if checkpoints could not be fetched due to a 5xx response code', async () => {
-      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue({status: 500})
+      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue({status: 500})
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
       await wait(() => {
@@ -131,7 +145,7 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should close exception message if close button of notification is clicked', async () => {
-      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
+      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue('error')
       const { getByLabelText, getByText, container, queryByText } = render(<TrackingStatus />)
 
       await wait(() => {
@@ -181,7 +195,7 @@ describe('TrackingStatus Component', () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
       ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
-      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
+      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue('error')
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {
@@ -222,7 +236,7 @@ describe('TrackingStatus Component', () => {
       const userId = 'some-user-id'
       const orderNumberTicketFieldId = 'ticketFieldId'
       ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
-      ZendeskClient.fetchCheckpointsHeaders = jest.fn().mockRejectedValue('error')
+      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue('error')
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
       await wait(() => {

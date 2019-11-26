@@ -15,7 +15,7 @@ class TrackingStatus extends React.Component {
       loading: true,
       showOrderNumberInput: false,
       orderNumber: '',
-      orderHeader: undefined,
+      orderStatus: undefined,
       exception: undefined
     }
     this.updateOrderNumber = this.updateOrderNumber.bind(this)
@@ -37,7 +37,7 @@ class TrackingStatus extends React.Component {
     this.setState({
       loading: false,
       showOrderNumberInput: true,
-      orderHeader: undefined,
+      orderStatus: undefined,
       exception: exception
     })
   }
@@ -69,10 +69,12 @@ class TrackingStatus extends React.Component {
   async fetchOrderStatus (orderNumber) {
     try {
       const userId = this.props.userId
-      const response = await ZendeskClient.fetchCheckpointsHeaders(userId, orderNumber)
+      const response = await ZendeskClient.fetchCheckpoints(userId, orderNumber)
+      const orderStatus = this.processCheckpointsResponse(response)
+
       this.setState({
         loading: false,
-        orderHeader: response.header,
+        orderStatus,
         exception: undefined
       })
     } catch (error) {
@@ -80,6 +82,34 @@ class TrackingStatus extends React.Component {
         type: 'error',
         message: error.status >= 500 ? I18n.t('trackingStatus.error.fetch.serverError', {statusCode: error.status}) : I18n.t('trackingStatus.error.fetch.badRequest')
       })
+    }
+  }
+
+  processCheckpointsResponse (response) {
+    const orderStatus = response.header.map(headerEntry => {
+      const trackingNumber = headerEntry.tracking_number
+      const courierName = headerEntry.courier.name
+      const status = {
+        message: headerEntry.last_delivery_status.status,
+        timestamp: this.getMostRecentTimestampForTrackingNumber(response.body, headerEntry.id)
+      }
+
+      return {
+        trackingNumber,
+        courierName,
+        status
+      }
+    })
+
+    return orderStatus
+  }
+
+  getMostRecentTimestampForTrackingNumber (body, checkpointId) {
+    if (body && checkpointId) {
+      const bodyEntriesOfCheckpoint = body[checkpointId]
+      const mostRecentTimestamp = new Date(Math.max.apply(null, bodyEntriesOfCheckpoint
+        .map(bodyEntry => new Date(bodyEntry.timestamp))))
+      return mostRecentTimestamp
     }
   }
 
@@ -99,10 +129,10 @@ class TrackingStatus extends React.Component {
             {this.state.showOrderNumberInput && <OrderNumberInputForm disabled={this.state.loading} orderNumber={this.state.orderNumber} onOrderNumberChange={this.updateOrderNumber} onSubmit={this.submitForm} />}
           </Col>
         </Row>
-        { !this.state.loading && !this.state.exception && this.state.orderHeader &&
+        { !this.state.loading && !this.state.exception && this.state.orderStatus &&
           <Row>
             <Col>
-              <OrderStatus orderHeader={this.state.orderHeader} />
+              <OrderStatus orderStatus={this.state.orderStatus} />
             </Col>
           </Row>}
         {!this.state.loading && this.state.exception &&
