@@ -86,22 +86,14 @@ class TrackingStatus extends React.Component {
   }
 
   processCheckpointsResponse (response) {
-    const orderStatus = response.header.map(headerEntry => {
-      const trackingNumber = headerEntry.tracking_number
-      const courierName = headerEntry.courier.name
-      const status = {
+    return response.header.map(headerEntry => ({
+      trackingNumber: headerEntry.tracking_number,
+      courierName: headerEntry.courier.name,
+      status: {
         message: headerEntry.last_delivery_status.status,
         timestamp: this.getMostRecentTimestampForTrackingNumber(response.body, headerEntry.id)
       }
-
-      return {
-        trackingNumber,
-        courierName,
-        status
-      }
-    })
-
-    return orderStatus
+    }))
   }
 
   getMostRecentTimestampForTrackingNumber (body, checkpointId) {
