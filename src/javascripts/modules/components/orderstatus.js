@@ -10,6 +10,9 @@ import {
   Row,
   Cell
 } from '@zendeskgarden/react-tables'
+import { IconButton, Icon } from '@zendeskgarden/react-buttons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 import I18n from '../../lib/i18n'
 
@@ -21,8 +24,9 @@ const OrderStatus = ({orderStatus}) => {
   return <Table size='small'>
     <Head>
       <HeaderRow>
-        <HeaderCell width='50%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
-        <HeaderCell width='50%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
+        <HeaderCell minimum width='45%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
+        <HeaderCell minimum width='45%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
+        <HeaderCell minimum width='10%' />
       </HeaderRow>
     </Head>
     <Body>
@@ -35,12 +39,19 @@ const OrderStatus = ({orderStatus}) => {
             href={directParcelLabPortalUrl(orderStatusEntry.trackingNumber, orderStatusEntry.courierName)}
           >
             <Row>
-              <Cell style={{wordBreak: 'break-all'}} width='50%'>{orderStatusEntry.trackingNumber}</Cell>
-              <Cell width='50%'>{orderStatusEntry.status.message}</Cell>
+              <Cell minimum style={{wordBreak: 'break-all'}} width='45%'>{orderStatusEntry.trackingNumber}</Cell>
+              <Cell minimum width='45%'>{orderStatusEntry.status.message}</Cell>
+              <Cell minimum width='10%'>
+                <IconButton>
+                  <Icon>
+                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                  </Icon>
+                </IconButton>
+              </Cell>
             </Row>
           </a>
           <GroupRow>
-            <Cell width='100%'>
+            <Cell minimum width='100%'>
               {I18n.t('trackingStatus.lastupdated')}: <strong style={{ marginLeft: '5px' }}>{toDateString(orderStatusEntry.status.timestamp)}</strong>
             </Cell>
           </GroupRow>

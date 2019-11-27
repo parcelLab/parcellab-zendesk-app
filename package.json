@@ -43,6 +43,9 @@
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/react-fontawesome": "^0.1.7",
     "@zendeskgarden/css-bedrock": "^7.0.31",
     "@zendeskgarden/react-buttons": "^7.0.2",
     "@zendeskgarden/react-forms": "^7.0.2",
@@ -51,6 +54,7 @@
     "@zendeskgarden/react-tables": "^7.0.2",
     "@zendeskgarden/react-theming": "^7.0.0",
     "@zendeskgarden/react-typography": "^7.0.0",
+    "@zendeskgarden/svg-icons": "^6.8.1",
     "core-js": "^3.3.6",
     "prop-types": "^15.7.2",
     "react": "^16.11.0",

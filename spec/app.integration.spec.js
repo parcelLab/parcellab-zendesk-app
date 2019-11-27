@@ -63,7 +63,7 @@ describe('ParcelLab App Module Integration', () => {
 
     await wait(() => {
       expect(queryByLabelText(container, /order/i)).not.toBeInTheDocument()
-      expect(container.querySelector('button')).not.toBeInTheDocument()
+      expect(container.querySelector('button[type="submit"]')).not.toBeInTheDocument()
       expect(queryByText(container, /could not/i)).not.toBeInTheDocument()
 
       expect(getByText(container, /sampleTrackingNumber/i)).toBeInTheDocument()

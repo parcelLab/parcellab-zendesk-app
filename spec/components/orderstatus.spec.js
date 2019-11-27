@@ -7,7 +7,7 @@ import OrderStatus from '../../src/javascripts/modules/components/orderstatus'
 describe('OrderStatus Component', () => {
   const orderStatus = [{
     trackingNumber: 'trackingNumber1',
-    courierName: 'courrierName1',
+    courierName: 'courierName1',
     status: {
       message: 'lastDeliveryStatus1',
       timestamp: new Date('2018-01-01T12:00:00.000Z')
@@ -15,7 +15,7 @@ describe('OrderStatus Component', () => {
   },
   {
     trackingNumber: 'trackingNumber2',
-    courierName: 'courrierName2',
+    courierName: 'courierName2',
     status: {
       message: 'lastDeliveryStatus2',
       timestamp: new Date('2019-01-01T12:00:00.000Z')
