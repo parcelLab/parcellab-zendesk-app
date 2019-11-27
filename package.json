@@ -1,6 +1,6 @@
 {
   "name": "parcellab-zendesk-app",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "A Zendesk ticket sidebar app to check order status via parcelLab API",
   "author": "parcelLab",
   "license": "Apache-2.0",
