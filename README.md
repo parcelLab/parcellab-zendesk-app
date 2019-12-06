@@ -12,6 +12,10 @@ This app is written in JavaScript and React.
 
 If you have any specifc questions, please feel free to contact Andre ([hmmmsausages](https://github.com/hmmmsausages) / [andre@parcellab.com](mailto:andre@parcellab.com))
 
+## General Flow / Installation / Configuration
+
+Please have a look at the dedicated [how.parcellab.works](https://how.parcellab.works/docs/third-party-app-integrations/parcellab-zendesk-app) for a list of features and installation and configuration instructions.
+
 ## Prerequisite
 
 To successfully test the integration of this Zendesk app with a live Zendesk portal and package the Zendesk app for a production release, you will need the Zendesk app tools (`zat`), which is a CLI Ruby tool.
