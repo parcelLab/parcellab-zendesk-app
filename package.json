@@ -10,7 +10,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "dev": "concurrently --kill-others \"npm run watch\" \"wait-on dist/manifest.json && npm run zat:server\"",
+    "dev": "concurrently --kill-others \"npm run watch\" \"wait-on dist/assets/app.js && npm run zat:server\"",
     "watch": "webpack --watch --mode=development",
     "zat:server": "zat server -p dist",
     "build:dev": "webpack --mode=development",
