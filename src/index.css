@@ -5,6 +5,15 @@
 @import '@zendeskgarden/react-tables/dist/styles.css';
 @import '@zendeskgarden/react-notifications/dist/styles.css';
 
+html {
+  overflow: hidden;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 .loader {
   width: 40px;
 }
