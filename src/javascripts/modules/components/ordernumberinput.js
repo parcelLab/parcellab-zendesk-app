@@ -20,7 +20,7 @@ const OrderNumberInputForm = ({orderNumber, onOrderNumberChange, onSubmit, disab
       </Row>
       <Row>
         <Col md={12}>
-          <Button disabled={disabled || orderNumber.length === 0} stretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
+          <Button disabled={disabled || orderNumber.length === 0} isStretched type='submit'>{I18n.t('trackingStatus.checkButton')}</Button>
         </Col>
       </Row>
     </Grid>

@@ -18,7 +18,7 @@ describe('ParcelLab App', () => {
   describe('Initialization Success', () => {
     beforeEach(async () => {
       document.body.innerHTML = '<section data-main id="root"><img class="loader" src="spinner.gif"/></section>'
-      await new App({})
+      await App({})
     })
 
     it('should render main stage with data', () => {

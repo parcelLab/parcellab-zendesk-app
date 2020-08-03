@@ -1,6 +1,6 @@
 /* eslint-env jest, browser */
 import React from 'react'
-import { render, fireEvent, wait } from '@testing-library/react'
+import { render, fireEvent, waitFor } from '@testing-library/react'
 
 import TrackingStatus from '../src/javascripts/modules/trackingstatus'
 import ZendeskClient from '../src/javascripts/lib/zendeskclient'
@@ -51,14 +51,14 @@ describe('TrackingStatus Component', () => {
     it('should show order status for each parcel if checkpoints have been fetched successfully', async () => {
       const { getByLabelText, queryByText, container } = render(<TrackingStatus />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
       fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
-      await wait(() => {
+      await waitFor(() => {
         expect(queryByText(/delivery is being prepared/i)).toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).toBeInTheDocument()
       })
@@ -67,14 +67,14 @@ describe('TrackingStatus Component', () => {
     it('should show tracking number for each parcel if checkpoints has been fetched successfully', async () => {
       const { getByLabelText, queryByText, container } = render(<TrackingStatus />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
       fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
-      await wait(() => {
+      await waitFor(() => {
         expect(queryByText(/delivery is being prepared/i)).toBeInTheDocument()
         expect(queryByText(/trackingNummber1/i)).toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).toBeInTheDocument()
@@ -85,14 +85,14 @@ describe('TrackingStatus Component', () => {
     it('should provide direct link to parcelLab portal for each fetched tracking number', async () => {
       const { getByLabelText, container } = render(<TrackingStatus />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
       fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('a')).toHaveAttribute('href', 'https://prtl.parcellab.com/trackings/details?trackingNo=trackingNummber1&courier=dhl')
       })
     })
@@ -100,14 +100,14 @@ describe('TrackingStatus Component', () => {
     it('should have a disabled check button if input field is empty', async () => {
       const { getByLabelText, container } = render(<TrackingStatus />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
       fireEvent.change(getByLabelText(/order/i), {target: {value: ''}})
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toHaveAttribute('disabled')
       })
     })
@@ -116,14 +116,14 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue({status: 400})
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
       fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
-      await wait(() => {
+      await waitFor(() => {
         expect(getByText(/could not be found/i)).toBeInTheDocument()
       })
     })
@@ -132,14 +132,14 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue({status: 500})
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
       fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
-      await wait(() => {
+      await waitFor(() => {
         expect(getByText(/response code: 500/i)).toBeInTheDocument()
       })
     })
@@ -148,20 +148,20 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue('error')
       const { getByLabelText, getByText, container, queryByText } = render(<TrackingStatus />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
       fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
-      await wait(() => {
+      await waitFor(() => {
         expect(getByText(/could not be found/i)).toBeInTheDocument()
       })
 
       fireEvent.click(getByLabelText(/close notification/i))
 
-      await wait(() => {
+      await waitFor(() => {
         expect(queryByText(/could not be found/i)).not.toBeInTheDocument()
       })
     })
@@ -174,7 +174,7 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(queryByText(/delivery is being prepared/i)).toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).toBeInTheDocument()
       })
@@ -186,7 +186,7 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve('some-order-number'))
       const { container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('a')).toHaveAttribute('href', 'https://prtl.parcellab.com/trackings/details?trackingNo=trackingNummber1&courier=dhl')
       })
     })
@@ -198,7 +198,7 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue('error')
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
         expect(queryByText(/delivery is being prepared/i)).not.toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).not.toBeInTheDocument()
@@ -211,7 +211,7 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.getValueFromCustomTicketField = jest.fn().mockReturnValue(Promise.resolve(''))
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
         expect(queryByText(/delivery is being prepared/i)).not.toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).not.toBeInTheDocument()
@@ -224,7 +224,7 @@ describe('TrackingStatus Component', () => {
       const orderNumberTicketFieldId = ''
       const { queryByText, container } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
         expect(queryByText(/delivery is being prepared/i)).not.toBeInTheDocument()
         expect(queryByText(/ready for collection/i)).not.toBeInTheDocument()
@@ -239,7 +239,7 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue('error')
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(queryByText(/order number status could not be found/i)).toBeInTheDocument()
       })
     })
@@ -250,7 +250,7 @@ describe('TrackingStatus Component', () => {
       ZendeskClient.getValueFromCustomTicketField = jest.fn().mockRejectedValue('error')
       const { queryByText } = render(<TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />)
 
-      await wait(() => {
+      await waitFor(() => {
         expect(queryByText(/could not automatically retrieve order number from zendesk ticket/i)).toBeInTheDocument()
       })
     })

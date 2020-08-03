@@ -26,7 +26,7 @@ If you're on macOS you should already have Ruby installed by default, so all you
 # Install rake, which is required by the Zendesk app tools
 gem install rake
 # Install the Zendesk app tools
-gem install zendesk_app_tools
+gem install zendesk_apps_tools
 ```
 
 It's also worthwhile to check out the following resources, so you get an idea how the development lifecycle of a Zendesk app works:

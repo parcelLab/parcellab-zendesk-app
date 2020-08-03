@@ -5,9 +5,7 @@ import {
   getByText,
   queryByText,
   queryByLabelText,
-  // Tip: all queries are also exposed on an object
-  // called "queries" which you could import here as well
-  wait,
+  waitFor,
   fireEvent
 } from '@testing-library/dom'
 
@@ -57,11 +55,11 @@ describe('ParcelLab App Module Integration', () => {
     }))
 
     document.body.innerHTML = '<section data-main id="root"><img class="loader" src="spinner.gif"/></section>'
-    await new App({})
+    await App({})
 
     const container = document.body
 
-    await wait(() => {
+    await waitFor(() => {
       expect(queryByLabelText(container, /order/i)).not.toBeInTheDocument()
       expect(container.querySelector('button[type="submit"]')).not.toBeInTheDocument()
       expect(queryByText(container, /could not/i)).not.toBeInTheDocument()
@@ -106,11 +104,11 @@ describe('ParcelLab App Module Integration', () => {
     }))
 
     document.body.innerHTML = '<section data-main id="root"><img class="loader" src="spinner.gif"/></section>'
-    await new App({})
+    await App({})
 
     const container = document.body
 
-    await wait(() => {
+    await waitFor(() => {
       expect(queryByLabelText(container, /order/i)).toBeInTheDocument()
       expect(container.querySelector('button')).toBeInTheDocument()
     })
@@ -118,7 +116,7 @@ describe('ParcelLab App Module Integration', () => {
     fireEvent.change(getByLabelText(container, /order/i), {target: {value: '123456'}})
     fireEvent.click(container.querySelector('Button[type=submit]'))
 
-    await wait(() => {
+    await waitFor(() => {
       expect(getByText(container, /sampleTrackingNumber/i)).toBeInTheDocument()
       expect(getByText(container, /deliveryStatus/i)).toBeInTheDocument()
     })

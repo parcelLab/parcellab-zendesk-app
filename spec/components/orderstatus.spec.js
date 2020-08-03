@@ -1,6 +1,6 @@
 /* eslint-env jest, browser */
 import React from 'react'
-import { render, wait } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
 
 import OrderStatus from '../../src/javascripts/modules/components/orderstatus'
 
@@ -25,7 +25,7 @@ describe('OrderStatus Component', () => {
   it('should display a tablerow for each orderStatus entry', async () => {
     const { queryByText } = render(<OrderStatus orderStatus={orderStatus} />)
 
-    await wait(() => {
+    await waitFor(() => {
       expect(queryByText(orderStatus[0].trackingNumber)).toBeInTheDocument()
       expect(queryByText(orderStatus[0].status.message)).toBeInTheDocument()
       expect(queryByText(orderStatus[1].trackingNumber)).toBeInTheDocument()
@@ -36,19 +36,19 @@ describe('OrderStatus Component', () => {
   it('should display a timestamp as LocaleDateString for each orderStatus entry', async () => {
     const { queryByText } = render(<OrderStatus orderStatus={orderStatus} />)
 
-    await wait(() => {
+    await waitFor(() => {
       expect(queryByText(orderStatus[0].status.timestamp.toLocaleDateString())).toBeInTheDocument()
       expect(queryByText(orderStatus[1].status.timestamp.toLocaleDateString())).toBeInTheDocument()
     })
   })
 
   it('should contain a direct link to the tracking in the parcelLab portal', async () => {
-    const { getByText } = render(<OrderStatus orderStatus={orderStatus} />)
+    const { getByTestId } = render(<OrderStatus orderStatus={orderStatus} />)
 
-    await wait(() => {
-      expect(getByText('trackingNumber1').closest('a'))
+    await waitFor(() => {
+      expect(getByTestId('trackingNumber1-link'))
         .toHaveAttribute('href', `https://prtl.parcellab.com/trackings/details?trackingNo=${orderStatus[0].trackingNumber}&courier=${orderStatus[0].courierName}`)
-      expect(getByText('trackingNumber2').closest('a'))
+      expect(getByTestId('trackingNumber2-link'))
         .toHaveAttribute('href', `https://prtl.parcellab.com/trackings/details?trackingNo=${orderStatus[1].trackingNumber}&courier=${orderStatus[1].courierName}`)
     })
   })

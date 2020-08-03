@@ -1,6 +1,6 @@
 /* eslint-env jest, browser */
 import React from 'react'
-import { render, fireEvent, wait } from '@testing-library/react'
+import { render, fireEvent, waitFor } from '@testing-library/react'
 
 import ExceptionNotification from '../../src/javascripts/modules/components/exceptionnotification'
 
@@ -14,7 +14,7 @@ describe('ExceptionNotification Component', () => {
   it('should display exception message', async () => {
     const { queryByText } = render(<ExceptionNotification exception={exception} onClose={onClose} />)
 
-    await wait(() => {
+    await waitFor(() => {
       expect(queryByText(exception.message)).toBeInTheDocument()
     })
   })

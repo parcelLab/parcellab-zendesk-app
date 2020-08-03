@@ -1,5 +1,5 @@
 const path = require('path')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -42,19 +42,25 @@ module.exports = {
           {loader: 'css-loader', options: { url: false }},
           'postcss-loader'
         ]
+      },
+      {
+        test: /\.svg/,
+        use: ['@svgr/webpack']
       }
     ]
   },
 
   plugins: [
     // Empties the dist folder
-    new CleanWebpackPlugin(['dist/*']),
+    new CleanWebpackPlugin(),
 
     // Copy over static assets
-    new CopyWebpackPlugin([
-      { from: 'src/manifest.json', to: '../', flatten: true },
-      { from: 'src/images/*', to: '.', flatten: true }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/manifest.json', to: '../', flatten: true },
+        { from: 'src/images/*', to: '.', flatten: true }
+      ]
+    }),
 
     new MiniCssExtractPlugin({
       filename: '[name].css'

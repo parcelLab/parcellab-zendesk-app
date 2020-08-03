@@ -10,9 +10,9 @@ import {
   Row,
   Cell
 } from '@zendeskgarden/react-tables'
-import { IconButton, Icon } from '@zendeskgarden/react-buttons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { IconButton } from '@zendeskgarden/react-buttons'
+import { Tooltip } from '@zendeskgarden/react-tooltips'
+import NewWindow from '@zendeskgarden/svg-icons/src/16/new-window-fill.svg'
 
 import I18n from '../../lib/i18n'
 
@@ -24,34 +24,37 @@ const OrderStatus = ({orderStatus}) => {
   return <Table size='small'>
     <Head>
       <HeaderRow>
-        <HeaderCell minimum width='45%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
-        <HeaderCell minimum width='45%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
-        <HeaderCell minimum width='10%' />
+        <HeaderCell width='40%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
+        <HeaderCell width='40%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
+        <HeaderCell isMinimum />
       </HeaderRow>
     </Head>
     <Body>
       { orderStatus.map((orderStatusEntry, index) =>
         <React.Fragment key={index}>
-          <a
-            style={{color: 'inherit', textDecoration: 'inherit'}}
-            target='_blank'
-            rel='noopener'
-            href={directParcelLabPortalUrl(orderStatusEntry.trackingNumber, orderStatusEntry.courierName)}
-          >
-            <Row>
-              <Cell minimum style={{wordBreak: 'break-all'}} width='45%'>{orderStatusEntry.trackingNumber}</Cell>
-              <Cell minimum width='45%'>{orderStatusEntry.status.message}</Cell>
-              <Cell minimum width='10%'>
-                <IconButton>
-                  <Icon>
-                    <FontAwesomeIcon icon={faExternalLinkAlt} />
-                  </Icon>
-                </IconButton>
-              </Cell>
-            </Row>
-          </a>
+
+          <Row>
+            <Cell width='40%' style={{wordBreak: 'break-all'}}>{orderStatusEntry.trackingNumber}</Cell>
+            <Cell width='40%'>{orderStatusEntry.status.message}</Cell>
+            <Cell isMinimum>
+              <Tooltip
+                placement='auto'
+                content={I18n.t('trackingStatus.tooltipExternalLink')}
+              >
+                <a
+                  target='_blank'
+                  href={directParcelLabPortalUrl(orderStatusEntry.trackingNumber, orderStatusEntry.courierName)}
+                  data-testid={orderStatusEntry.trackingNumber + '-link'}
+                >
+                  <IconButton>
+                    <NewWindow aria-label={I18n.t('trackingStatus.tooltipExternalLink')} />
+                  </IconButton>
+                </a>
+              </Tooltip>
+            </Cell>
+          </Row>
           <GroupRow>
-            <Cell minimum width='100%'>
+            <Cell isMinimum colSpan={3}>
               {I18n.t('trackingStatus.lastupdated')}: <strong style={{ marginLeft: '5px' }}>{toDateString(orderStatusEntry.status.timestamp)}</strong>
             </Cell>
           </GroupRow>
