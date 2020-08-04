@@ -1,5 +1,6 @@
+const { DefinePlugin } = require('webpack')
 const path = require('path')
-const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -10,6 +11,8 @@ const externalAssets = {
     'https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js'
   ]
 }
+
+const APP_VERSION = require('./package.json').version
 
 module.exports = {
   entry: {
@@ -27,7 +30,9 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules|dist|coverage)/,
-        use: { loader: 'babel-loader' }
+        use: {
+          loader: 'babel-loader'
+        }
       },
       {
         type: 'javascript/auto',
@@ -39,13 +44,18 @@ module.exports = {
         test: /\.(sa|sc|c)ss$/,
         use: [
           MiniCssExtractPlugin.loader,
-          {loader: 'css-loader', options: { url: false }},
+          {
+            loader: 'css-loader',
+            options: {
+              url: false
+            }
+          },
           'postcss-loader'
         ]
       },
       {
         test: /\.svg/,
-        use: ['@svgr/webpack']
+        use: '@svgr/webpack'
       }
     ]
   },
@@ -54,10 +64,20 @@ module.exports = {
     // Empties the dist folder
     new CleanWebpackPlugin(),
 
+    // set globals
+    new DefinePlugin({
+      APP_VERSION
+    }),
+
     // Copy over static assets
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'src/manifest.json', to: '../', flatten: true },
+        {
+          from: 'src/manifest.json',
+          to: '../',
+          flatten: true,
+          transform: content => content.toString().replace('APP_VERSION', APP_VERSION)
+        },
         { from: 'src/images/*', to: '.', flatten: true }
       ]
     }),

@@ -1,4 +1,4 @@
-/* global ZAFClient */
+/* global ZAFClient APP_VERSION */
 const zafClient = ZAFClient.init()
 
 class ZendeskClient {
@@ -16,7 +16,10 @@ class ZendeskClient {
     const request = {
       url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${preprocessedOrderNumber}`,
       type: 'GET',
-      cors: true
+      cors: true,
+      headers: {
+        'User-Agent': `parcelLab-ZenDesk-App/${APP_VERSION}`
+      }
     }
     return zafClient.request(request)
   }

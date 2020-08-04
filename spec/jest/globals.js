@@ -9,3 +9,4 @@ global.InitializedZAFClient = {
 global.ZAFClient = {
   init: () => global.InitializedZAFClient
 }
+global.APP_VERSION = '1.2.3-TEST'
