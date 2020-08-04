@@ -66,7 +66,7 @@ module.exports = {
 
     // set globals
     new DefinePlugin({
-      APP_VERSION
+      APP_VERSION: JSON.stringify(APP_VERSION)
     }),
 
     // Copy over static assets
