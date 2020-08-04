@@ -20,48 +20,51 @@ const directParcelLabPortalUrl = (trackingNumber, courierName) => `https://prtl.
 
 const toDateString = date => date.toLocaleDateString()
 
-const OrderStatus = ({orderStatus}) => {
-  return <Table size='small'>
-    <Head>
-      <HeaderRow>
-        <HeaderCell width='40%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
-        <HeaderCell width='40%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
-        <HeaderCell isMinimum />
-      </HeaderRow>
-    </Head>
-    <Body>
-      { orderStatus.map((orderStatusEntry, index) =>
-        <React.Fragment key={index}>
+const OrderStatus = ({ orderStatus }) => {
+  return (
+    <Table size='small'>
+      <Head>
+        <HeaderRow>
+          <HeaderCell width='40%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
+          <HeaderCell width='40%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
+          <HeaderCell isMinimum />
+        </HeaderRow>
+      </Head>
+      <Body>
+        {orderStatus.map((orderStatusEntry, index) =>
+          <React.Fragment key={index}>
 
-          <Row>
-            <Cell width='40%' style={{wordBreak: 'break-all'}}>{orderStatusEntry.trackingNumber}</Cell>
-            <Cell width='40%'>{orderStatusEntry.status.message}</Cell>
-            <Cell isMinimum>
-              <Tooltip
-                placement='auto'
-                content={I18n.t('trackingStatus.tooltipExternalLink')}
-              >
-                <a
-                  target='_blank'
-                  href={directParcelLabPortalUrl(orderStatusEntry.trackingNumber, orderStatusEntry.courierName)}
-                  data-testid={orderStatusEntry.trackingNumber + '-link'}
+            <Row>
+              <Cell width='40%' style={{ wordBreak: 'break-all' }}>{orderStatusEntry.trackingNumber}</Cell>
+              <Cell width='40%'>{orderStatusEntry.status.message}</Cell>
+              <Cell isMinimum>
+                <Tooltip
+                  placement='auto'
+                  content={I18n.t('trackingStatus.tooltipExternalLink')}
                 >
-                  <IconButton>
-                    <NewWindow aria-label={I18n.t('trackingStatus.tooltipExternalLink')} />
-                  </IconButton>
-                </a>
-              </Tooltip>
-            </Cell>
-          </Row>
-          <GroupRow>
-            <Cell isMinimum colSpan={3}>
-              {I18n.t('trackingStatus.lastupdated')}: <strong style={{ marginLeft: '5px' }}>{toDateString(orderStatusEntry.status.timestamp)}</strong>
-            </Cell>
-          </GroupRow>
-        </React.Fragment>
-      )}
-    </Body>
-  </Table>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    href={directParcelLabPortalUrl(orderStatusEntry.trackingNumber, orderStatusEntry.courierName)}
+                    data-testid={orderStatusEntry.trackingNumber + '-link'}
+                  >
+                    <IconButton>
+                      <NewWindow aria-label={I18n.t('trackingStatus.tooltipExternalLink')} />
+                    </IconButton>
+                  </a>
+                </Tooltip>
+              </Cell>
+            </Row>
+            <GroupRow>
+              <Cell isMinimum colSpan={3}>
+                {I18n.t('trackingStatus.lastupdated')}: <strong style={{ marginLeft: '5px' }}>{toDateString(orderStatusEntry.status.timestamp)}</strong>
+              </Cell>
+            </GroupRow>
+          </React.Fragment>
+        )}
+      </Body>
+    </Table>
+  )
 }
 
 OrderStatus.propTypes = {
