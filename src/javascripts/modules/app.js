@@ -8,14 +8,18 @@ import I18n from '../../javascripts/lib/i18n'
 import ZendeskClient from '../lib/zendeskclient'
 
 const App = async appData => {
-  const {locale} = await ZendeskClient.getCurrentUserDetails()
-  const {userId, orderNumberTicketFieldId, stripLeadingZerosFromOrderNumber} = await ZendeskClient.getAppSettings()
+  const { locale } = await ZendeskClient.getCurrentUserDetails()
+  const { userId, orderNumberTicketFieldId, stripLeadingZerosFromOrderNumber, displayCourierIcon } = await ZendeskClient.getAppSettings()
   ZendeskClient.setStripLeadingZerosFromOrderNumber(stripLeadingZerosFromOrderNumber)
 
   I18n.loadTranslations(locale)
   ReactDOM.render(
     <ThemeProvider>
-      <TrackingStatus userId={userId} orderNumberTicketFieldId={orderNumberTicketFieldId} />
+      <TrackingStatus
+        userId={userId}
+        orderNumberTicketFieldId={orderNumberTicketFieldId}
+        displayCourierIcon={displayCourierIcon}
+      />
     </ThemeProvider>,
     document.getElementById('root')
   )

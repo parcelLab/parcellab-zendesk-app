@@ -7,3 +7,5 @@ userId: 1612197
 orderNumberTicketFieldId: 360003921997
 # define if the app should strip leading zeros from order numbers (requirement of MOO)
 stripLeadingZerosFromOrderNumber: true
+# define if the app should show the corresponding courier icon in front of the tracking number
+displayCourierIcon: true

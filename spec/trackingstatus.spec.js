@@ -15,7 +15,8 @@ describe('TrackingStatus Component', () => {
         header: [{
           id: 'tracking1',
           courier: {
-            name: 'dhl'
+            name: 'dhl',
+            prettyname: 'DHL'
           },
           tracking_number: 'trackingNummber1',
           last_delivery_status: {
@@ -24,7 +25,8 @@ describe('TrackingStatus Component', () => {
         }, {
           id: 'tracking2',
           courier: {
-            name: 'dhl'
+            name: 'dhl',
+            prettyname: 'DHL'
           },
           tracking_number: 'trackingNummber2',
           last_delivery_status: {
@@ -32,12 +34,12 @@ describe('TrackingStatus Component', () => {
           }
         }],
         body: {
-          'tracking1': [{
+          tracking1: [{
             timestamp: '2018-04-01T00:00:00.000Z'
           }, {
             timestamp: '2018-04-04T18:14:59.000Z'
           }],
-          'tracking2': [{
+          tracking2: [{
             timestamp: '2018-04-12T00:00:00.000Z'
           }, {
             timestamp: '2018-06-006T18:14:59.000Z'
@@ -55,7 +57,7 @@ describe('TrackingStatus Component', () => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
-      fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+      fireEvent.change(getByLabelText(/order/i), { target: { value: '123456' } })
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
       await waitFor(() => {
@@ -71,7 +73,7 @@ describe('TrackingStatus Component', () => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
-      fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+      fireEvent.change(getByLabelText(/order/i), { target: { value: '123456' } })
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
       await waitFor(() => {
@@ -89,7 +91,7 @@ describe('TrackingStatus Component', () => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
-      fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+      fireEvent.change(getByLabelText(/order/i), { target: { value: '123456' } })
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
       await waitFor(() => {
@@ -104,7 +106,7 @@ describe('TrackingStatus Component', () => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
-      fireEvent.change(getByLabelText(/order/i), {target: {value: ''}})
+      fireEvent.change(getByLabelText(/order/i), { target: { value: '' } })
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
       await waitFor(() => {
@@ -113,14 +115,14 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should show bad request error message if checkpoints could not be found due to a 4xx response code', async () => {
-      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue({status: 400})
+      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue({ status: 400 })
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
       await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
-      fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+      fireEvent.change(getByLabelText(/order/i), { target: { value: '123456' } })
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
       await waitFor(() => {
@@ -129,14 +131,14 @@ describe('TrackingStatus Component', () => {
     })
 
     it('should show server error message if checkpoints could not be fetched due to a 5xx response code', async () => {
-      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue({status: 500})
+      ZendeskClient.fetchCheckpoints = jest.fn().mockRejectedValue({ status: 500 })
       const { getByLabelText, getByText, container } = render(<TrackingStatus />)
 
       await waitFor(() => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
-      fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+      fireEvent.change(getByLabelText(/order/i), { target: { value: '123456' } })
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
       await waitFor(() => {
@@ -152,7 +154,7 @@ describe('TrackingStatus Component', () => {
         expect(container.querySelector('Button[type=submit]')).toBeInTheDocument()
       })
 
-      fireEvent.change(getByLabelText(/order/i), {target: {value: '123456'}})
+      fireEvent.change(getByLabelText(/order/i), { target: { value: '123456' } })
       fireEvent.click(container.querySelector('Button[type=submit]'))
 
       await waitFor(() => {

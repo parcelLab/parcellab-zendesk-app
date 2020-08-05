@@ -7,7 +7,10 @@ import OrderStatus from '../../src/javascripts/modules/components/orderstatus'
 describe('OrderStatus Component', () => {
   const orderStatus = [{
     trackingNumber: 'trackingNumber1',
-    courierName: 'courierName1',
+    courier: {
+      name: 'courierName1',
+      prettyName: 'CN1'
+    },
     status: {
       message: 'lastDeliveryStatus1',
       timestamp: new Date('2018-01-01T12:00:00.000Z')
@@ -15,7 +18,10 @@ describe('OrderStatus Component', () => {
   },
   {
     trackingNumber: 'trackingNumber2',
-    courierName: 'courierName2',
+    courier: {
+      name: 'courierName2',
+      prettyName: 'CN2'
+    },
     status: {
       message: 'lastDeliveryStatus2',
       timestamp: new Date('2019-01-01T12:00:00.000Z')
@@ -47,9 +53,9 @@ describe('OrderStatus Component', () => {
 
     await waitFor(() => {
       expect(getByTestId('trackingNumber1-link'))
-        .toHaveAttribute('href', `https://prtl.parcellab.com/trackings/details?trackingNo=${orderStatus[0].trackingNumber}&courier=${orderStatus[0].courierName}`)
+        .toHaveAttribute('href', `https://prtl.parcellab.com/trackings/details?trackingNo=${orderStatus[0].trackingNumber}&courier=${orderStatus[0].courier.name}`)
       expect(getByTestId('trackingNumber2-link'))
-        .toHaveAttribute('href', `https://prtl.parcellab.com/trackings/details?trackingNo=${orderStatus[1].trackingNumber}&courier=${orderStatus[1].courierName}`)
+        .toHaveAttribute('href', `https://prtl.parcellab.com/trackings/details?trackingNo=${orderStatus[1].trackingNumber}&courier=${orderStatus[1].courier.name}`)
     })
   })
 })

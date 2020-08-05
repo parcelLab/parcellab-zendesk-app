@@ -28,6 +28,12 @@
     "secure": false,
     "required": false,
     "default": false
+  },{
+    "name": "displayCourierIcon",
+    "type": "checkbox",
+    "secure": false,
+    "required": false,
+    "default": true
   }],
   "version": "APP_VERSION",
   "frameworkVersion": "2.0"
