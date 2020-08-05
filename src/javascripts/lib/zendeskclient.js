@@ -1,5 +1,6 @@
 /* global ZAFClient APP_VERSION */
 const zafClient = ZAFClient.init()
+const ref = `parcelLab-Zendesk-App/${APP_VERSION}`
 
 class ZendeskClient {
   constructor (stripLeadingZerosFromOrderNumber = false) {
@@ -14,12 +15,9 @@ class ZendeskClient {
   fetchCheckpoints (userId, orderNumber) {
     const preprocessedOrderNumber = this.stripLeadingZerosFromOrderNumber ? orderNumber.replace(/^0*/, '') : orderNumber
     const request = {
-      url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${preprocessedOrderNumber}`,
+      url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${preprocessedOrderNumber}&ref=${ref}`,
       type: 'GET',
-      cors: true,
-      headers: {
-        'User-Agent': `parcelLab-ZenDesk-App/${APP_VERSION}`
-      }
+      cors: true
     }
     return zafClient.request(request)
   }

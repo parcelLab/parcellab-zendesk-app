@@ -60,14 +60,12 @@ describe('ZendeskClient', () => {
       )
     })
 
-    it('calls zafClient.request with User-Agent set to custom parcelLab-Zendesk-App client', () => {
+    it('calls zafClient.request with ref query set to app/version string', () => {
       ZendeskClient.fetchCheckpoints()
 
       expect(global.InitializedZAFClient.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          headers: {
-            'User-Agent': 'parcelLab-ZenDesk-App/1.2.3-TEST'
-          }
+          url: expect.stringContaining('ref=parcelLab-Zendesk-App/1.2.3-TEST')
         })
       )
     })
@@ -81,7 +79,7 @@ describe('ZendeskClient', () => {
 
       expect(global.InitializedZAFClient.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${orderNumber}`,
+          url: expect.stringContaining(`https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${orderNumber}`),
           type: 'GET',
           cors: true
         })
@@ -98,7 +96,7 @@ describe('ZendeskClient', () => {
 
       expect(global.InitializedZAFClient.request).toHaveBeenCalledWith(
         expect.objectContaining({
-          url: `https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${strippedOrderNumber}`,
+          url: expect.stringContaining(`https://api.parcellab.com/v2/checkpoints?u=${userId}&orderNo=${strippedOrderNumber}`),
           type: 'GET',
           cors: true
         })
