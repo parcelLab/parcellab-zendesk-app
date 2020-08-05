@@ -27,7 +27,7 @@ const OrderStatus = ({ orderStatus }) => {
         <HeaderRow>
           <HeaderCell width='40%'>{I18n.t('trackingStatus.trackingNumber')}</HeaderCell>
           <HeaderCell width='40%'>{I18n.t('trackingStatus.deliveryStatus')}</HeaderCell>
-          <HeaderCell isMinimum />
+          <HeaderCell width='20%' />
         </HeaderRow>
       </Head>
       <Body>
@@ -37,7 +37,7 @@ const OrderStatus = ({ orderStatus }) => {
             <Row>
               <Cell width='40%' style={{ wordBreak: 'break-all' }}>{orderStatusEntry.trackingNumber}</Cell>
               <Cell width='40%'>{orderStatusEntry.status.message}</Cell>
-              <Cell isMinimum>
+              <Cell width='20%'>
                 <Tooltip
                   placement='auto'
                   content={I18n.t('trackingStatus.tooltipExternalLink')}
@@ -56,7 +56,7 @@ const OrderStatus = ({ orderStatus }) => {
               </Cell>
             </Row>
             <GroupRow>
-              <Cell isMinimum colSpan={3}>
+              <Cell colSpan={3}>
                 {I18n.t('trackingStatus.lastupdated')}: <strong style={{ marginLeft: '5px' }}>{toDateString(orderStatusEntry.status.timestamp)}</strong>
               </Cell>
             </GroupRow>
