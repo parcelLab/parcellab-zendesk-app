@@ -63,7 +63,7 @@ class TrackingStatus extends React.Component {
   }
 
   updateOrderNumber (event) {
-    this.setState({orderNumber: event.target.value})
+    this.setState({ orderNumber: event.target.value })
   }
 
   async fetchOrderStatus (orderNumber) {
@@ -80,7 +80,7 @@ class TrackingStatus extends React.Component {
     } catch (error) {
       this.resetFetchedOrderStatus({
         type: 'error',
-        message: error.status >= 500 ? I18n.t('trackingStatus.error.fetch.serverError', {statusCode: error.status}) : I18n.t('trackingStatus.error.fetch.badRequest')
+        message: error.status >= 500 ? I18n.t('trackingStatus.error.fetch.serverError', { statusCode: error.status }) : I18n.t('trackingStatus.error.fetch.badRequest')
       })
     }
   }
@@ -112,28 +112,32 @@ class TrackingStatus extends React.Component {
   }
 
   render () {
-    return <React.Fragment>
-      <Grid>
-        <Row>
-          <Col>
-            {this.state.showOrderNumberInput && <OrderNumberInputForm disabled={this.state.loading} orderNumber={this.state.orderNumber} onOrderNumberChange={this.updateOrderNumber} onSubmit={this.submitForm} />}
-          </Col>
-        </Row>
-        { !this.state.loading && !this.state.exception && this.state.orderStatus &&
+    return (
+      <>
+        <Grid>
           <Row>
             <Col>
-              <OrderStatus orderStatus={this.state.orderStatus} />
+              {this.state.showOrderNumberInput && <OrderNumberInputForm disabled={this.state.loading} orderNumber={this.state.orderNumber} onOrderNumberChange={this.updateOrderNumber} onSubmit={this.submitForm} />}
             </Col>
-          </Row>}
-        {!this.state.loading && this.state.exception &&
-          <Row>
-            <Col style={{marginTop: '50px'}}>
-              <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({exception: undefined})} />
-            </Col>
-          </Row>}
-      </Grid>
-      {!this.state.showOrderNumberInput && this.state.loading && <img className='loader centered' src='spinner.gif' />}
-    </React.Fragment>
+          </Row>
+          {!this.state.loading && !this.state.exception && this.state.orderStatus && (
+            <Row>
+              <Col>
+                <OrderStatus orderStatus={this.state.orderStatus} />
+              </Col>
+            </Row>
+          )}
+          {!this.state.loading && this.state.exception && (
+            <Row>
+              <Col style={{ marginTop: '50px' }}>
+                <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({ exception: undefined })} />
+              </Col>
+            </Row>
+          )}
+        </Grid>
+        {!this.state.showOrderNumberInput && this.state.loading && <img className='loader centered' src='spinner.gif' />}
+      </>
+    )
   }
 }
 

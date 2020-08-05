@@ -19,7 +19,8 @@ describe('ParcelLab App Module Integration', () => {
         return Promise.resolve({
           currentUser: {
             locale: 'en'
-          }})
+          }
+        })
       } else {
         return Promise.resolve({
           'ticket.customField:custom_field_sampleOrderNumberTicketFieldId': 'sampleOrderNumber'
@@ -46,7 +47,7 @@ describe('ParcelLab App Module Integration', () => {
         }
       }],
       body: {
-        'tracking1': [{
+        tracking1: [{
           timestamp: '2018-04-01T00:00:00.000Z'
         }, {
           timestamp: '2018-04-04T18:14:59.000Z'
@@ -73,8 +74,8 @@ describe('ParcelLab App Module Integration', () => {
     global.InitializedZAFClient.get = jest.fn().mockReturnValue(Promise.resolve({
       currentUser: {
         locale: 'en'
-      }}
-    ))
+      }
+    }))
 
     global.InitializedZAFClient.metadata = jest.fn().mockReturnValue(Promise.resolve({
       settings: {
@@ -95,7 +96,7 @@ describe('ParcelLab App Module Integration', () => {
         }
       }],
       body: {
-        'tracking1': [{
+        tracking1: [{
           timestamp: '2018-04-01T00:00:00.000Z'
         }, {
           timestamp: '2018-04-04T18:14:59.000Z'
@@ -113,7 +114,7 @@ describe('ParcelLab App Module Integration', () => {
       expect(container.querySelector('button')).toBeInTheDocument()
     })
 
-    fireEvent.change(getByLabelText(container, /order/i), {target: {value: '123456'}})
+    fireEvent.change(getByLabelText(container, /order/i), { target: { value: '123456' } })
     fireEvent.click(container.querySelector('Button[type=submit]'))
 
     await waitFor(() => {
