@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Row, Col } from '@zendeskgarden/react-grid'
 
 import I18n from '../lib/i18n'
@@ -7,143 +7,118 @@ import ExceptionNotification from './components/exceptionnotification'
 import OrderNumberInputForm from './components/ordernumberinput'
 import OrderStatus from './components/orderstatus'
 
-class TrackingStatus extends React.Component {
-  constructor (props) {
-    super(props)
+const TrackingStatus = ({
+  userId,
+  orderNumberTicketFieldId,
+  displayCourierIcon
+}) => {
+  const [loading, setLoading] = useState(true)
+  const [showOrderNumberInput, setShowOrderNumberInput] = useState(false)
+  const [orderNumber, setOrderNumber] = useState('')
+  const [orderStatus, setOrderStatus] = useState()
+  const [exception, setException] = useState()
 
-    this.state = {
-      loading: true,
-      showOrderNumberInput: false,
-      orderNumber: '',
-      orderStatus: undefined,
-      exception: undefined,
-      // TODO change me
-      displayCourierIcon: this.props.displayCourierIcon
-    }
-    this.updateOrderNumber = this.updateOrderNumber.bind(this)
-    this.submitForm = this.submitForm.bind(this)
-    this.attemptAutoFetchOrderStatus = this.attemptAutoFetchOrderStatus.bind(this)
-    this.fetchOrderStatus = this.fetchOrderStatus.bind(this)
-    this.resetFetchedOrderStatus = this.resetFetchedOrderStatus.bind(this)
+  useEffect(() => { attemptAutoFetchOrderStatus() }, [])
+  useEffect(() => { ZendeskClient.resizeContainer() })
+
+  const resetFetchedOrderStatus = exception => {
+    setLoading(false)
+    setShowOrderNumberInput(true)
+    setOrderStatus(undefined)
+    setException(exception)
   }
 
-  componentDidMount () {
-    this.attemptAutoFetchOrderStatus()
-  }
-
-  componentDidUpdate () {
-    ZendeskClient.resizeContainer()
-  }
-
-  resetFetchedOrderStatus (exception) {
-    this.setState({
-      loading: false,
-      showOrderNumberInput: true,
-      orderStatus: undefined,
-      exception: exception
-    })
-  }
-
-  async attemptAutoFetchOrderStatus () {
-    if (this.props.orderNumberTicketFieldId) {
+  const attemptAutoFetchOrderStatus = async () => {
+    if (orderNumberTicketFieldId) {
       try {
-        const orderNumber = await ZendeskClient.getValueFromCustomTicketField(this.props.orderNumberTicketFieldId)
+        const orderNumber = await ZendeskClient.getValueFromCustomTicketField(orderNumberTicketFieldId)
         if (orderNumber) {
-          this.fetchOrderStatus(orderNumber)
+          fetchOrderStatus(orderNumber)
         } else {
-          this.resetFetchedOrderStatus()
+          resetFetchedOrderStatus()
         }
       } catch (error) {
-        this.resetFetchedOrderStatus({
+        resetFetchedOrderStatus({
           type: 'warning',
           message: I18n.t('trackingStatus.warning.invalidOrderNumberTicketFieldId.message')
         })
       }
     } else {
-      this.resetFetchedOrderStatus()
+      resetFetchedOrderStatus()
     }
   }
 
-  updateOrderNumber (event) {
-    this.setState({ orderNumber: event.target.value })
+  const updateOrderNumber = event => {
+    setOrderNumber(event.target.value)
   }
 
-  async fetchOrderStatus (orderNumber) {
+  const fetchOrderStatus = async orderNumber => {
     try {
-      const userId = this.props.userId
       const response = await ZendeskClient.fetchCheckpoints(userId, orderNumber)
-      const orderStatus = this.processCheckpointsResponse(response)
+      const orderStatus = processCheckpointsResponse(response)
 
-      this.setState({
-        loading: false,
-        orderStatus,
-        exception: undefined
-      })
+      setLoading(false)
+      setOrderStatus(orderStatus)
+      setException(undefined)
     } catch (error) {
-      this.resetFetchedOrderStatus({
+      resetFetchedOrderStatus({
         type: 'error',
         message: error.status >= 500 ? I18n.t('trackingStatus.error.fetch.serverError', { statusCode: error.status }) : I18n.t('trackingStatus.error.fetch.badRequest')
       })
     }
   }
 
-  processCheckpointsResponse (response) {
-    return response.header.map(headerEntry => ({
-      trackingNumber: headerEntry.tracking_number,
-      courier: {
-        name: headerEntry.courier.name,
-        prettyName: headerEntry.courier.prettyname
-      },
-      status: {
-        message: headerEntry.last_delivery_status.status,
-        timestamp: this.getMostRecentTimestampForTrackingNumber(response.body, headerEntry.id)
-      }
-    }))
-  }
+  const processCheckpointsResponse = response => response.header.map(headerEntry => ({
+    trackingNumber: headerEntry.tracking_number,
+    courier: {
+      name: headerEntry.courier.name,
+      prettyName: headerEntry.courier.prettyname
+    },
+    status: {
+      message: headerEntry.last_delivery_status.status,
+      timestamp: getMostRecentTimestampForTrackingNumber(response.body, headerEntry.id)
+    }
+  }))
 
-  getMostRecentTimestampForTrackingNumber (body, checkpointId) {
+  const getMostRecentTimestampForTrackingNumber = (body, checkpointId) => {
     const bodyEntriesOfCheckpoint = body[checkpointId]
     const mostRecentTimestamp = new Date(Math.max.apply(null, bodyEntriesOfCheckpoint
       .map(bodyEntry => new Date(bodyEntry.timestamp))))
     return mostRecentTimestamp
   }
 
-  async submitForm (event) {
-    this.setState({
-      loading: true
-    })
+  const submitForm = event => {
     event.preventDefault()
-    this.fetchOrderStatus(this.state.orderNumber)
+    setLoading(true)
+    fetchOrderStatus(orderNumber)
   }
 
-  render () {
-    return (
-      <>
-        <Grid>
+  return (
+    <>
+      <Grid>
+        <Row>
+          <Col>
+            {showOrderNumberInput && <OrderNumberInputForm disabled={loading} orderNumber={orderNumber} onOrderNumberChange={updateOrderNumber} onSubmit={submitForm} />}
+          </Col>
+        </Row>
+        {!loading && !exception && orderStatus && (
           <Row>
             <Col>
-              {this.state.showOrderNumberInput && <OrderNumberInputForm disabled={this.state.loading} orderNumber={this.state.orderNumber} onOrderNumberChange={this.updateOrderNumber} onSubmit={this.submitForm} />}
+              <OrderStatus orderStatus={orderStatus} displayCourierIcon={displayCourierIcon} />
             </Col>
           </Row>
-          {!this.state.loading && !this.state.exception && this.state.orderStatus && (
-            <Row>
-              <Col>
-                <OrderStatus orderStatus={this.state.orderStatus} displayCourierIcon={this.state.displayCourierIcon} />
-              </Col>
-            </Row>
-          )}
-          {!this.state.loading && this.state.exception && (
-            <Row>
-              <Col style={{ marginTop: '50px' }}>
-                <ExceptionNotification exception={this.state.exception} onClose={() => this.setState({ exception: undefined })} />
-              </Col>
-            </Row>
-          )}
-        </Grid>
-        {!this.state.showOrderNumberInput && this.state.loading && <img className='loader centered' src='spinner.gif' />}
-      </>
-    )
-  }
+        )}
+        {!loading && exception && (
+          <Row>
+            <Col style={{ marginTop: '50px' }}>
+              <ExceptionNotification exception={exception} onClose={() => this.setState({ exception: undefined })} />
+            </Col>
+          </Row>
+        )}
+      </Grid>
+      {!showOrderNumberInput && loading && <img className='loader centered' src='spinner.gif' />}
+    </>
+  )
 }
 
 export default TrackingStatus
