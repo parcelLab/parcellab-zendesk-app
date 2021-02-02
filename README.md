@@ -8,11 +8,14 @@ This app is written in JavaScript and React.
 
 ![Zendesk App in Action](./src/images/screenshot-0.png "Zendesk App in Action")
 
+
 ## Support
 
 If you have any specifc questions, please feel free to contact Andre ([hmmmsausages](https://github.com/hmmmsausages) / [andre@parcellab.com](mailto:andre@parcellab.com))
 
 ## General Flow / Installation / Configuration
+
+You can install the app directly from the Zendesk marketplace: [https://www.zendesk.com/apps/support/parcellab](https://www.zendesk.com/apps/support/parcellab)
 
 Please have a look at the dedicated [how.parcellab.works](https://how.parcellab.works/docs/third-party-app-integrations/parcellab-zendesk-app) for a list of features and installation and configuration instructions.
 
